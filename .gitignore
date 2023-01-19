@@ -1,0 +1,6 @@
+# Ignore any files in /bin and /obj Folders
+**/bin/*
+**/obj/*
+.vs/
+grupp-tiger2/.vs
+app.config
