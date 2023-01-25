@@ -12,7 +12,7 @@ namespace grupp_tiger2
 
             foreach (var bankUser in bankUsers)
             {
-                Console.WriteLine($"{bankUser.first_name} {bankUser.last_name} {bankUser.pin_code}");
+                Console.WriteLine($"{bankUser.first_name} {bankUser.last_name} {bankUser.pin_code} {bankUser.username}");
             }
 
             mainMenu();
