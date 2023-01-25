@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Folder Include="UI\" />
-    <Folder Include="Data\" />
-    <Folder Include="Classes\" />
   </ItemGroup>
 
   <ItemGroup>
