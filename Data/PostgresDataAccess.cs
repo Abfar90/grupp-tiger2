@@ -1,7 +1,8 @@
 ﻿using System.Configuration;
 using Dapper;
+using grupp_tiger2.Classes;
 using Npgsql;
-namespace grupp_tiger2
+namespace grupp_tiger2.Data
 {
     internal class PostgresDataAccess
     {
