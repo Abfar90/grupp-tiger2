@@ -1,4 +1,4 @@
-﻿namespace grupp_tiger2
+﻿namespace grupp_tiger2.Classes
 {
     internal class bank_user
     {

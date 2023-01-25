@@ -1,4 +1,6 @@
-﻿namespace grupp_tiger2
+﻿using grupp_tiger2.Data;
+
+namespace grupp_tiger2
 {
     internal class Program
     {
