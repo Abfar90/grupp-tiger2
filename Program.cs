@@ -1,4 +1,5 @@
-﻿using grupp_tiger2.Data;
+﻿using grupp_tiger2.Classes;
+using grupp_tiger2.Data;
 
 namespace grupp_tiger2
 {
@@ -22,12 +23,13 @@ namespace grupp_tiger2
             {
                 if (userName == bankUser.username && password == bankUser.pin_code)
                 {
-                    Console.WriteLine("Welcome " + bankUser.first_name + bankUser.last_name);
-                    mainMenu();
+                    bank_user user = bankUser;
+                    Console.WriteLine("Welcome " + bankUser.first_name + " " + bankUser.last_name + " you will now receive options;");
+                    mainMenu(user);
                 }
             }
 
-            void mainMenu()
+            void mainMenu(bank_user user)
             {
                 // Menyval
                 List<string> main_Menu = new List<string>()
@@ -136,7 +138,21 @@ namespace grupp_tiger2
                     {
                         if (x == 0)
                         {
+                            var bankAccounts = PostgresDataAccess.LoadBankAccounts();
 
+                            foreach (var account in bankAccounts)
+                            {
+                                if (user.id == account.user_id && account.name=="Debit")
+                                {
+                                    Console.WriteLine("Your debit balance is " + account.balance);
+                                    Console.ReadLine();
+                                }
+                                else if (user.id == account.user_id && account.name == "Savings")
+                                {
+                                    Console.WriteLine("Your savings balance is " + account.balance);
+                                    Console.ReadLine();
+                                }
+                            }
                         }
                         else if (x == 1)
                         {
