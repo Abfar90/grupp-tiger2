@@ -22,7 +22,7 @@ namespace grupp_tiger2
 
                 Console.WriteLine("Please insert your password.");
                 string password = Console.ReadLine();
-                
+
                 if (int.TryParse(password, out int passWord) && userName.Length == 4)
                 {
                     foreach (var bankUser in bankUsers)
@@ -63,8 +63,8 @@ namespace grupp_tiger2
                     loginCounter = 0;
                 }
             }
-            
-            
+
+
 
 
             void mainMenu(bank_user user)
@@ -180,7 +180,7 @@ namespace grupp_tiger2
 
                             foreach (var account in bankAccounts)
                             {
-                                if (user.id == account.user_id && account.name=="Debit")
+                                if (user.id == account.user_id && account.name == "Debit")
                                 {
                                     Console.WriteLine("Your debit balance is " + account.balance);
                                     Console.ReadLine();
@@ -194,6 +194,64 @@ namespace grupp_tiger2
                         }
                         else if (x == 1)
                         {
+                            var bankAccounts = PostgresDataAccess.LoadBankAccounts();
+
+                            foreach (var account in bankAccounts)
+                            {
+                                if (user.id == account.user_id && account.name == "Debit")
+                                {
+
+                                    Console.WriteLine("Your debit balance is " + account.balance);
+
+                                }
+                                else if (user.id == account.user_id && account.name == "Savings")
+                                {
+                                    Console.WriteLine("Your savings balance is " + account.balance);
+
+                                }
+                            }
+
+                            Console.Write("Please select account to transfer from.");
+                            string accountTransferFrom = Console.ReadLine();
+
+                            Console.Write("Please select account to transfer to.");
+                            string accountTransferTo = Console.ReadLine();
+
+                            foreach (var account in bankAccounts)
+                            {
+                                if (accountTransferFrom == "Debit" && account.name == "Debit" && account.balance > 0)
+                                {
+
+
+                                    Console.WriteLine("Your debit balance is " + account.balance);
+
+                                }
+                                else if (user.id == account.user_id && account.name == "Savings")
+                                {
+                                    Console.WriteLine("Your savings balance is " + account.balance);
+
+                                }
+                            }
+
+                            //var accountsTransactions = PostgresDataAccess.LoadBankAccounts();
+
+                            //foreach (var account in bankAccounts)
+                            //{
+                            //    if (user.id == account.user_id && account.name == "Debit")
+                            //    {
+
+                            //        Console.WriteLine("Your debit balance is " + account.balance);
+
+                            //    }
+                            //    else if (user.id == account.user_id && account.name == "Savings")
+                            //    {
+                            //        Console.WriteLine("Your savings balance is " + account.balance);
+
+                            //    }
+                            //}
+
+
+
 
                         }
                         else if (x == 2)
