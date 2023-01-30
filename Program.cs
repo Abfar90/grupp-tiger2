@@ -7,27 +7,65 @@ namespace grupp_tiger2
     {
         static void Main(string[] args)
         {
-
-            Console.WriteLine("Welcome to the Tiger bank");
-
-            Console.WriteLine("Please insert your username.");
-            string userName = Console.ReadLine();
-
-            Console.WriteLine("Please insert your password.");
-            string password = Console.ReadLine();
-
-
             var bankUsers = PostgresDataAccess.LoadBankUsers();
 
-            foreach (var bankUser in bankUsers)
+            int loginCounter = 0;
+            bool correctLogin = false;
+            bool userFound = false;
+
+            while (correctLogin == false)
             {
-                if (userName == bankUser.username && password == bankUser.pin_code)
+                Console.WriteLine("Welcome to the Tiger bank");
+
+                Console.WriteLine("Please insert your username.");
+                string userName = Console.ReadLine();
+
+                Console.WriteLine("Please insert your password.");
+                string password = Console.ReadLine();
+                
+                if (int.TryParse(password, out int passWord) && userName.Length == 4)
                 {
-                    bank_user user = bankUser;
-                    Console.WriteLine("Welcome " + bankUser.first_name + " " + bankUser.last_name + " you will now receive options;");
-                    mainMenu(user);
+                    foreach (var bankUser in bankUsers)
+                    {
+                        if (userName == bankUser.username && password == bankUser.pin_code)
+                        {
+                            userFound = true;
+                            bank_user user = bankUser;
+                            Console.WriteLine("Welcome " + bankUser.first_name + " " + bankUser.last_name + " you will now receive options;");
+                            mainMenu(user);
+                            correctLogin = true;
+                            break;
+                        }
+                    }
+                    if (userFound == false)
+                    {
+                        loginCounter++;
+                        Console.WriteLine("Sorry, the entered username or password is incorrect.");
+                        Console.WriteLine("Please try again.");
+                        correctLogin = false;
+                    }
+                }
+                else if (userName.Length != 4)
+                {
+                    Console.WriteLine("Sorry, your username must contain FOUR characters");
+                    loginCounter++;
+                }
+                else if (!int.TryParse(password, out int pass_word))
+                {
+                    Console.WriteLine("Sorry, your password must only contain NUMBERS.");
+                    loginCounter++;
+                }
+                if (loginCounter >= 3)
+                {
+                    Console.WriteLine("TOO MANY FAILED ATTEMPTS.");
+                    Console.WriteLine("You are now prevented from logging in for 3 minutes.");
+                    Thread.Sleep(6000);
+                    loginCounter = 0;
                 }
             }
+            
+            
+
 
             void mainMenu(bank_user user)
             {
