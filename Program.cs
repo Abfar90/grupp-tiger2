@@ -72,8 +72,8 @@ namespace grupp_tiger2
                 List<string> main_Menu = new List<string>()
                 {
                     "Your accounts and account balance",
-                    "Transactions",
-                    "Withdrawal",
+                    "Transfer",
+                    "Show transfer log",
                     "Return to login",
                     "Exit"
                 };
@@ -188,8 +188,8 @@ namespace grupp_tiger2
                         {
                             var bankAccounts = PostgresDataAccess.LoadBankAccounts();
 
-                            string from_account = "";
-                            string to_account = "";
+                            int from_account = 0;
+                            int to_account = 0;
 
                             foreach (var account in bankAccounts)
                             {
@@ -212,11 +212,11 @@ namespace grupp_tiger2
                                 {
                                     if (user.id == account.user_id && account.name == "Debit")
                                     {
-                                        from_account = account.name;
+                                        from_account = account.account_id;
                                     }
                                     if (user.id == account.user_id && account.name == "Savings")
                                     {
-                                        to_account = account.name;
+                                        to_account = account.account_id;
                                     }
                                 }
                             }
@@ -226,11 +226,11 @@ namespace grupp_tiger2
                                 {
                                     if (user.id == account.user_id && account.name == "Debit")
                                     {
-                                        to_account = account.name;
+                                        to_account = account.account_id;
                                     }
                                     if (user.id == account.user_id && account.name == "Savings")
                                     {
-                                        from_account = account.name;
+                                        from_account = account.account_id;
                                     }
                                 }
                             }
@@ -245,20 +245,23 @@ namespace grupp_tiger2
                         }
                         else if (x == 2)
                         {
-
+                            // Show transfer log
                         }
                         else if (x == 3)
                         {
-
+                            // Return to login
                         }
                         else if (x == 4)
                         {
-
+                            // Exit
                         }
                     }
                     Console.Clear();
                 }
             }
+            
+                    
+                    
         }
     }
 }
