@@ -73,7 +73,7 @@ namespace grupp_tiger2.Data
                     cmd.Connection = conn;
                     cmd.CommandText = "BEGIN; " +
                                       "UPDATE account SET balance = balance - @amount WHERE account_id = @from_account AND user_id = @id; " +
-                                      "UPDATE account SET balance = balance + @amount WHERE account_id = @to_account AND user_id = @id; " +
+                                      "UPDATE account SET balance = balance + @amount WHERE account_id = @to_account; " +
                                       "COMMIT;";
 
                     cmd.Parameters.AddWithValue("@from_account", from_account);
@@ -96,7 +96,7 @@ namespace grupp_tiger2.Data
             }
         }
 
-        public static transaction logTransfer(transaction log)
+        public static void logTransfer(transaction log)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
@@ -120,7 +120,6 @@ namespace grupp_tiger2.Data
 
                     cmd.ExecuteNonQuery();
                     
-                    return log;
                 }
             }
         }

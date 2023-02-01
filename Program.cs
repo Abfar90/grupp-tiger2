@@ -17,10 +17,10 @@ namespace grupp_tiger2
             {
                 Console.WriteLine("Welcome to the Tiger bank");
 
-                Console.WriteLine("Please insert your username.");
+                Console.WriteLine("Please enter your username.");
                 string userName = Console.ReadLine();
 
-                Console.WriteLine("Please insert your password.");
+                Console.WriteLine("Please enter your password.");
                 string password = Console.ReadLine();
 
                 if (int.TryParse(password, out int passWord) && userName.Length == 4)
@@ -57,8 +57,8 @@ namespace grupp_tiger2
                 if (loginCounter >= 3)
                 {
                     Console.WriteLine("TOO MANY FAILED ATTEMPTS.");
-                    Console.WriteLine("You are now prevented from logging in for 3 minutes.");
-                    Thread.Sleep(6000);
+                    Console.WriteLine("You are now prohibited from logging in for 10 seconds.");
+                    Thread.Sleep(10000);
                     loginCounter = 0;
                 }
             }
@@ -90,7 +90,6 @@ namespace grupp_tiger2
                     Console.WriteLine("Welcome " + user.first_name + " " + user.last_name + " to the Main Menu.");
                     Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
 
-                    //Booleans bestämmer vilket menyval som är markerat
                     if (choices[0] == true)
                     {
                         Console.WriteLine("[ " + main_Menu[0] + " ]");
@@ -134,7 +133,6 @@ namespace grupp_tiger2
 
                     ConsoleKeyInfo key = Console.ReadKey();
 
-                    // Navigering med 'upp' och 'ned' tangenter
                     if (key.Key == ConsoleKey.DownArrow)
                     {
                         if (x == 4)
@@ -168,92 +166,214 @@ namespace grupp_tiger2
 
                     }
 
-                    // Användaren väljer menyval med 'enter'
                     else if (key.Key == ConsoleKey.Enter)
                     {
-                        if (x == 0)
+                        switch (x)
                         {
-                            var bankAccounts = PostgresDataAccess.LoadBankAccounts();
+                            case 0:
 
-                            foreach (var account in bankAccounts)
-                            {
-                                if (user.id == account.user_id)
-                                {
-                                    Console.WriteLine($"Your {account.name} balance is: {account.balance}");
-                                }
-                            }
-                            Console.ReadKey();
-                        }
-                        else if (x == 1)
-                        {
-                            var bankAccounts = PostgresDataAccess.LoadBankAccounts();
+                                var bankAccounts = PostgresDataAccess.LoadBankAccounts();
 
-                            int from_account = 0;
-                            int to_account = 0;
-
-                            foreach (var account in bankAccounts)
-                            {
-                                if (user.id == account.user_id && account.name == "Debit")
-                                {
-                                    Console.WriteLine("Your debit balance is " + account.balance);
-                                }
-                                if (user.id == account.user_id && account.name == "Savings")
-                                {
-                                    Console.WriteLine("Your savings balance is " + account.balance);
-                                }
-                            }
-
-                            Console.Write("Please select account to transfer from: ");
-                            string accountTransferFrom = Console.ReadLine();
-
-                            if (accountTransferFrom == "Debit")
-                            {
                                 foreach (var account in bankAccounts)
                                 {
-                                    if (user.id == account.user_id && account.name == "Debit")
+                                    if (user.id == account.user_id)
                                     {
-                                        from_account = account.account_id;
-                                    }
-                                    if (user.id == account.user_id && account.name == "Savings")
-                                    {
-                                        to_account = account.account_id;
+                                        Console.WriteLine($"Your {account.name} balance is: {account.balance}");
                                     }
                                 }
-                            }
-                            else if (accountTransferFrom == "Savings")
-                            {
-                                foreach (var account in bankAccounts)
+                                Console.ReadKey();
+                                break;
+
+                            case 1:
+
+                                bankAccounts = PostgresDataAccess.LoadBankAccounts();
+
+                                int from_account = 0;
+                                int to_account = 0;
+
+                                Console.WriteLine("Press '1' or '2' for transfer: ");
+                                Console.WriteLine("1.Between your accounts.");
+                                Console.WriteLine("2.To other customers' accounts.");
+
+                                key = Console.ReadKey();
+
+                                if (key.Key == ConsoleKey.D1)
                                 {
-                                    if (user.id == account.user_id && account.name == "Debit")
+                                    foreach (var account in bankAccounts)
                                     {
-                                        to_account = account.account_id;
+                                        if (user.id == account.user_id && account.name == "Debit")
+                                        {
+                                            Console.WriteLine("Your debit balance is " + account.balance);
+                                        }
+                                        if (user.id == account.user_id && account.name == "Savings")
+                                        {
+                                            Console.WriteLine("Your savings balance is " + account.balance);
+                                        }
                                     }
-                                    if (user.id == account.user_id && account.name == "Savings")
+                                    Console.Write("\nPlease select account to transfer from: ");
+                                    string accountTransferFrom = Console.ReadLine();
+
+                                    if (accountTransferFrom == "Debit")
                                     {
-                                        from_account = account.account_id;
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == "Debit")
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                            if (user.id == account.user_id && account.name == "Savings")
+                                            {
+                                                to_account = account.account_id;
+                                            }
+                                        }
+                                    }
+                                    else if (accountTransferFrom == "Savings")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == "Debit")
+                                            {
+                                                to_account = account.account_id;
+                                            }
+                                            if (user.id == account.user_id && account.name == "Savings")
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                        }
+                                    }
+
+                                    bool canTransfer = false;
+
+                                    while (!canTransfer)
+                                    {
+                                        Console.Write("Please select amount to transfer: ");
+                                        double amount = double.Parse(Console.ReadLine());
+
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (from_account == account.account_id)
+                                            {
+                                                if (amount > account.balance)
+                                                {
+                                                    Console.WriteLine("Sorry, you can't transfer more money than you have available.");
+                                                    Console.WriteLine("Please try again.");
+                                                }
+                                                else
+                                                {
+                                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                                    canTransfer = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+                                else if (key.Key == ConsoleKey.D2)
+                                {
+                                    bankAccounts = PostgresDataAccess.LoadBankAccounts();
+
+                                    foreach (var account in bankAccounts)
+                                    {
+                                        if (user.id == account.user_id && account.name == "Debit")
+                                        {
+                                            Console.WriteLine("Your debit balance is " + account.balance);
+                                        }
+                                        if (user.id == account.user_id && account.name == "Savings")
+                                        {
+                                            Console.WriteLine("Your savings balance is " + account.balance);
+                                        }
+                                    }
+
+                                    Console.Write("\nPlease enter account to transfer from: ");
+                                    string accountTransferFrom = Console.ReadLine();
+
+                                    foreach (var account in bankAccounts)
+                                    {
+                                        Console.WriteLine($"{account.account_id} --> {account.name}: {account.balance}");
+                                    }
+
+                                    Console.Write("\nPlease enter which customer id to transfer to: ");
+                                    int userTransferTo = int.Parse(Console.ReadLine());
+
+                                    Console.Write("\nAnd which of their accounts to transfer to: ");
+                                    string accountTransferTo = Console.ReadLine();
+
+                                    if (accountTransferFrom == "Debit")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                            if (userTransferTo == account.user_id && account.name == accountTransferTo)
+                                            {
+                                                to_account = account.account_id;
+                                            }
+                                        }
+                                    }
+                                    else if (accountTransferFrom == "Savings")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                            if (userTransferTo == account.user_id && account.name == accountTransferTo)
+                                            {
+                                                to_account = account.account_id;
+                                            }
+                                        }
+                                    }
+
+                                    bool canTransfer = false;
+                                    
+                                    while (!canTransfer)
+                                    {
+                                        Console.Write("Please select amount to transfer: ");
+                                        double amount = double.Parse(Console.ReadLine());
+
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (from_account == account.account_id)
+                                            {
+                                                if (amount > account.balance)
+                                                {
+                                                    Console.WriteLine("Sorry, you can't transfer more money than you have available.");
+                                                    Console.WriteLine("Please try again.");
+                                                }
+                                                else
+                                                {
+                                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                                    canTransfer = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            
 
-                            Console.Write("Please select amount to transfer: ");
-                            double amount = double.Parse(Console.ReadLine());
-                            
-                            PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                break;
 
+                            case 2:
 
-                        }
-                        else if (x == 2)
-                        {
-                            // Show transfer log
-                        }
-                        else if (x == 3)
-                        {
-                            // Return to login
-                        }
-                        else if (x == 4)
-                        {
-                            // Exit
+                                // Show transfer log
+
+                                break; 
+
+                            case 3:
+
+                                // Return to login
+
+                                break;
+
+                            case 4:
+
+                                // Exit
+
+                                break;
                         }
                     }
                     Console.Clear();
