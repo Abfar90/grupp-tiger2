@@ -130,17 +130,14 @@ namespace grupp_tiger2.Data
 
         public static void CreateUser(bank_user user)
         {
-            
+            //parameters.Add(new NpgsqlParameter("@first_name", user.first_name));
+            //parameters.Add(new NpgsqlParameter("@last_name", user.last_name));
+            //parameters.Add(new NpgsqlParameter("@pin_code", user.pin_code));
+            //parameters.Add(new NpgsqlParameter("@role_id", user.roleID));
+            //parameters.Add(new NpgsqlParameter("@branch_id", user.branchID));
+            //parameters.Add(new NpgsqlParameter("@username", user.username));
+
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
-
-            parameters.Add(new NpgsqlParameter("@first_name", user.first_name));
-            parameters.Add(new NpgsqlParameter("@last_name", user.last_name));
-            parameters.Add(new NpgsqlParameter("@pin_code", user.pin_code));
-            parameters.Add(new NpgsqlParameter("@role_id", user.roleID));
-            parameters.Add(new NpgsqlParameter("@branch_id", user.branchID));
-            parameters.Add(new NpgsqlParameter("@username", user.username));
-            
-
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -151,12 +148,19 @@ namespace grupp_tiger2.Data
                 {
                     cmd.Connection = conn;
 
-                    foreach (NpgsqlParameter parameter in parameters)
-                    {
-                        cmd.Parameters.Add(parameter);
-                    }
+                    cmd.Parameters.AddWithValue("@firstname", user.first_name);
+                    cmd.Parameters.AddWithValue("@lastname", user.last_name);
+                    cmd.Parameters.AddWithValue("@pincode", user.pin_code);
+                    cmd.Parameters.AddWithValue("@roleid", user.roleID);
+                    cmd.Parameters.AddWithValue("@branchid", user.branchID);
+                    cmd.Parameters.AddWithValue("@username", user.username);
 
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\", \"username\") VALUES (@first_name, @last_name, @pin_code, @roleID, @branchID, @userName;";
+                    cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
+                        "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
+                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
+
+                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," + 
+                        " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
 
                     cmd.ExecuteNonQuery();
 
