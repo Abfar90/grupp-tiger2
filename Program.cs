@@ -242,11 +242,31 @@ namespace grupp_tiger2
                                         }
                                     }
 
+                                    bool canTransfer = false;
 
-                                    Console.Write("Please select amount to transfer: ");
-                                    double amount = double.Parse(Console.ReadLine());
+                                    while (!canTransfer)
+                                    {
+                                        Console.Write("Please select amount to transfer: ");
+                                        double amount = double.Parse(Console.ReadLine());
 
-                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (from_account == account.account_id)
+                                            {
+                                                if (amount > account.balance)
+                                                {
+                                                    Console.WriteLine("Sorry, you can't transfer more money than you have available.");
+                                                    Console.WriteLine("Please try again.");
+                                                }
+                                                else
+                                                {
+                                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                                    canTransfer = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
 
                                 }
                                 else if (key.Key == ConsoleKey.D2)
@@ -308,10 +328,31 @@ namespace grupp_tiger2
                                         }
                                     }
 
-                                    Console.Write("Please select amount to transfer: ");
-                                    double amount = double.Parse(Console.ReadLine());
+                                    bool canTransfer = false;
+                                    
+                                    while (!canTransfer)
+                                    {
+                                        Console.Write("Please select amount to transfer: ");
+                                        double amount = double.Parse(Console.ReadLine());
 
-                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (from_account == account.account_id)
+                                            {
+                                                if (amount > account.balance)
+                                                {
+                                                    Console.WriteLine("Sorry, you can't transfer more money than you have available.");
+                                                    Console.WriteLine("Please try again.");
+                                                }
+                                                else
+                                                {
+                                                    PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
+                                                    canTransfer = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                                 break;
