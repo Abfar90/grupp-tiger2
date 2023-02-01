@@ -7,8 +7,6 @@
         public string last_name { get; set; }
         public string pin_code { get; set; }
         public string username { get; set; }
-        public int roleID { get; set; }
-        public int branchID { get; set; }
 
         public bank_user(string first_name, string last_name, string pin_code, string username, int roleID, int branchID)
         {

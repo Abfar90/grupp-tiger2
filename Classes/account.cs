@@ -14,6 +14,6 @@ namespace grupp_tiger2.Classes
         public int account_id { get; set; }
         public int user_id { get; set; }
         public string currency_id { get; set; }
-        
+
     }
 }
