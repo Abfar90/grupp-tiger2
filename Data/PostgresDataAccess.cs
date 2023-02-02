@@ -63,6 +63,24 @@ namespace grupp_tiger2.Data
             }
         }
 
+        public static List<bank_transactions> LoadTransactions()
+        {
+            // This is the connection string from the app.config file, and "postgres" is the name of the connection string
+            string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            // using is a C# feature that automatically closes the connection when the code inside the block is done
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                // Opens the connection to the database
+                conn.Open();
+
+                // This is the Dapper method that executes the query and returns a list of bank_user objects
+                var output = conn.Query<bank_transactions>("select * from bank_transactions", new DynamicParameters());
+                return output.ToList();
+
+            }
+        }
+
         public static void Transfer(int from_account, int to_account, double amount, int id)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
@@ -85,7 +103,7 @@ namespace grupp_tiger2.Data
                     cmd.Parameters.AddWithValue("@id", id);
 
                     DateTime timeOfTransaction = DateTime.Now;
-                    transaction log = new transaction(id, from_account, to_account, timeOfTransaction.ToString(), amount);
+                    bank_transactions log = new bank_transactions(id, from_account, to_account, timeOfTransaction.ToString(), amount);
                     logTransfer(log);
 
                     cmd.ExecuteNonQuery();
@@ -99,7 +117,7 @@ namespace grupp_tiger2.Data
             }
         }
 
-        public static void logTransfer(transaction log)
+        public static void logTransfer(bank_transactions log)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
