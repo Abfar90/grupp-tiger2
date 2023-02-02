@@ -150,8 +150,8 @@ namespace grupp_tiger2.Data
                     cmd.Parameters.AddWithValue("@firstname", user.first_name);
                     cmd.Parameters.AddWithValue("@lastname", user.last_name);
                     cmd.Parameters.AddWithValue("@pincode", user.pin_code);
-                    cmd.Parameters.AddWithValue("@roleid", user.roleID);
-                    cmd.Parameters.AddWithValue("@branchid", user.branchID);
+                    cmd.Parameters.AddWithValue("@roleid", user.role_id);
+                    cmd.Parameters.AddWithValue("@branchid", user.branch_id);
                     cmd.Parameters.AddWithValue("@username", user.username);
 
                     cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +

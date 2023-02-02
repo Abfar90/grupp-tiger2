@@ -31,9 +31,9 @@ namespace grupp_tiger2
                         {
                             userFound = true;
 
-                            if (bankUser.roleID == 1 || bankUser.roleID == 3)
+                            if (bankUser.role_id == 1 || bankUser.role_id == 3)
                             {
-                                adminMenu();
+                                adminMenu(bankUser);
                                 break;
                             }
 
@@ -387,7 +387,8 @@ namespace grupp_tiger2
                 }
 
             }
-            void adminMenu()
+
+            void adminMenu(bank_user admin)
             {
                 Console.Clear();
 
@@ -487,9 +488,9 @@ namespace grupp_tiger2
                         {
                             var bankUsers = PostgresDataAccess.LoadBankUsers();
 
-                            foreach (var user in bankUsers)
+                            foreach (var customer in bankUsers)
                             {
-                                    Console.WriteLine($"Your {account.name} balance is: {account.balance}");
+                                    Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
  
                             }
                             Console.ReadKey();
@@ -497,15 +498,33 @@ namespace grupp_tiger2
                         }
                         else if (x == 1)
                         {
-                            // re
+                            bank_user newUser = new bank_user();
+                            newUser.role_id = 2;
+                            newUser.branch_id = 1;
+
+                            Console.WriteLine("Enter first name");
+                            newUser.first_name = Console.ReadLine();
+
+                            Console.WriteLine("Enter last name");
+                            newUser.last_name = Console.ReadLine();
+
+                            Console.WriteLine("Enter username");
+                            newUser.username = Console.ReadLine();
+
+                            Console.WriteLine("Enter pincode");
+                            newUser.pin_code = Console.ReadLine();
+
+                            PostgresDataAccess.CreateUser(newUser);
                         }
                         else if (x == 2)
                         {
-                            // Show transfer log
+                            mainMenu(admin);
+                            // return to main menu
                         }
                         else if (x == 3)
                         {
-                            // Return to login
+                            Environment.Exit(0);
+                            // exit
                         }
                     }
                     Console.Clear();

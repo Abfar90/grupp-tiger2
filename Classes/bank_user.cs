@@ -7,8 +7,8 @@
         public string last_name { get; set; }
         public string pin_code { get; set; }
         public string username { get; set; }
-        public int roleID { get; set; }
-        public int branchID { get; set; }
+        public int role_id { get; set; }
+        public int branch_id { get; set; }
 
         public bank_user(string first_name, string last_name, string pin_code, string username, int roleID, int branchID)
         {
@@ -16,8 +16,8 @@
             this.last_name = last_name;
             this.pin_code = pin_code;
             this.username = username;
-            this.roleID = roleID;
-            this.branchID = branchID;
+            this.role_id = roleID;
+            this.branch_id = branchID;
         }
 
         public bank_user()
