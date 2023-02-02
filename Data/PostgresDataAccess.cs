@@ -85,7 +85,7 @@ namespace grupp_tiger2.Data
                     cmd.Parameters.AddWithValue("@id", id);
 
                     DateTime timeOfTransaction = DateTime.Now;
-                    transaction log = new transaction(id, from_account, to_account, timeOfTransaction.ToString(), amount);
+                    bank_transactions log = new bank_transactions(id, from_account, to_account, timeOfTransaction.ToString(), amount);
                     logTransfer(log);
 
                     cmd.ExecuteNonQuery();
@@ -99,7 +99,7 @@ namespace grupp_tiger2.Data
             }
         }
 
-        public static void logTransfer(transaction log)
+        public static void logTransfer(bank_transactions log)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
