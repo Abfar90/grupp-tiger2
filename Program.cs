@@ -30,6 +30,13 @@ namespace grupp_tiger2
                         if (userName == bankUser.username && password == bankUser.pin_code)
                         {
                             userFound = true;
+
+                            if (bankUser.roleID == 1 || bankUser.roleID == 3)
+                            {
+                                adminMenu();
+                                break;
+                            }
+
                             bank_user user = bankUser;
                             mainMenu(user);
                             correctLogin = true;
@@ -258,10 +265,133 @@ namespace grupp_tiger2
                     }
                     Console.Clear();
                 }
+
             }
-            
-                    
-                    
+            void adminMenu()
+            {
+                Console.Clear();
+
+                List<string> main_Menu = new List<string>()
+                {
+                    "Show all customers",
+                    "Create new customer account",
+                    "Return to main menu",
+                    "Exit"
+                };
+                bool[] choices = { true, false, false, false};
+
+                int x = 0;
+
+                bool showMenu = true;
+
+                while (showMenu)
+                {
+                    Console.WriteLine("Welcome to the Admin Menu. From here you will be able to view all" + 
+                        "customer accounts and create a new customer");
+                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
+
+                    //Booleans bestämmer vilket menyval som är markerat
+                    if (choices[0] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[0] + " ]");
+                    }
+                    else if (choices[0] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[0]);
+                    }
+                    if (choices[1] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[1] + " ]");
+                    }
+                    else if (choices[1] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[1]);
+                    }
+                    if (choices[2] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[2] + " ]");
+                    }
+                    else if (choices[2] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[2]);
+                    }
+                    if (choices[3] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[3] + " ]");
+                    }
+                    else if (choices[3] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[3]);
+                    }
+
+                    ConsoleKeyInfo key = Console.ReadKey();
+
+                    // Navigering med 'upp' och 'ned' tangenter
+                    if (key.Key == ConsoleKey.DownArrow)
+                    {
+                        if (x == 3)
+                        {
+                            choices[0] = true;
+                            choices[x] = false;
+                            x = 0;
+                        }
+                        else
+                        {
+                            choices[x + 1] = true;
+                            choices[x] = false;
+                            x++;
+                        }
+
+                    }
+                    else if (key.Key == ConsoleKey.UpArrow)
+                    {
+                        if (x == 0)
+                        {
+                            choices[3] = true;
+                            choices[x] = false;
+                            x = 3;
+                        }
+                        else
+                        {
+                            choices[x - 1] = true;
+                            choices[x] = false;
+                            x--;
+                        }
+
+                    }
+
+                    // Användaren väljer menyval med 'enter'
+                    else if (key.Key == ConsoleKey.Enter)
+                    {
+                        if (x == 0)
+                        {
+                            var bankUsers = PostgresDataAccess.LoadBankUsers();
+
+                            foreach (var user in bankUsers)
+                            {
+                                    Console.WriteLine($"Your {account.name} balance is: {account.balance}");
+ 
+                            }
+                            Console.ReadKey();
+                            // Show all accounts
+                        }
+                        else if (x == 1)
+                        {
+                            // re
+                        }
+                        else if (x == 2)
+                        {
+                            // Show transfer log
+                        }
+                        else if (x == 3)
+                        {
+                            // Return to login
+                        }
+                    }
+                    Console.Clear();
+                }
+
+            }
         }
     }
 }
