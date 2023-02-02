@@ -366,6 +366,13 @@ namespace grupp_tiger2
 
                             case 2:
 
+                                var transactions = PostgresDataAccess.LoadTransactions();
+
+                                foreach (var trans in transactions)
+                                {
+                                    Console.WriteLine($"{trans.amount} SEK was transferred at: {trans.timestamp}, From account: {trans.from_account_id}, To account: {trans.to_account_id}");
+                                }
+                                Console.ReadKey();
                                 // Show transfer log
 
                                 break; 
