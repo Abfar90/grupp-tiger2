@@ -109,7 +109,7 @@ namespace grupp_tiger2.Data
                     cmd.ExecuteNonQuery();
 
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Transaction Complete.");
+                    Console.WriteLine("\nTransaction Complete.\n");
                     Console.ResetColor();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
