@@ -1,5 +1,6 @@
 ﻿using grupp_tiger2.Classes;
 using grupp_tiger2.Data;
+using System.Media;
 
 namespace grupp_tiger2
 {
@@ -7,6 +8,7 @@ namespace grupp_tiger2
     {
         static void Main(string[] args)
         {
+
             var bankUsers = PostgresDataAccess.LoadBankUsers();
 
             int loginCounter = 0;
@@ -93,6 +95,7 @@ namespace grupp_tiger2
             void mainMenu(bank_user user)
             {
                 Console.Clear();
+
                 List<string> main_Menu = new List<string>()
                 {
                     "Your accounts and account balance",
@@ -101,6 +104,11 @@ namespace grupp_tiger2
                     "Return to login",
                     "Exit"
                 };
+
+                SoundPlayer musicPlayer = new SoundPlayer();
+                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\item-received.wav";
+
+                musicPlayer.Play();
 
                 bool[] choices = { true, false, false, false, false };
 
@@ -205,7 +213,6 @@ namespace grupp_tiger2
                             choices[x] = false;
                             x--;
                         }
-
                     }
 
                     else if (key.Key == ConsoleKey.Enter)
