@@ -15,12 +15,14 @@ namespace grupp_tiger2
 
             while (correctLogin == false)
             {
-                Console.WriteLine("Welcome to the Tiger bank");
-
-                Console.WriteLine("Please enter your username.");
+                Console.WriteLine("Welcome to");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("_____  _   __    ____  ___       ___    __    _      _    \r\n | |  | | / /`_ | |_  | |_)     | |_)  / /\\  | |\\ | | |_/ \r\n |_|  |_| \\_\\_/ |_|__ |_| \\     |_|_) /_/--\\ |_| \\| |_| \\ ");
+                Console.ResetColor();
+                Console.Write("\nPlease enter your username: ");
                 string userName = Console.ReadLine();
 
-                Console.WriteLine("Please enter your password.");
+                Console.Write("\nPlease enter your password: ");
                 string password = Console.ReadLine();
 
                 if (int.TryParse(password, out int passWord) && userName.Length == 4)
@@ -46,24 +48,33 @@ namespace grupp_tiger2
                     if (userFound == false)
                     {
                         loginCounter++;
-                        Console.WriteLine("Sorry, the entered username or password is incorrect.");
+                        Console.WriteLine("Sorry, the username/password is incorrect.");
                         Console.WriteLine("Please try again.");
                         correctLogin = false;
                     }
                 }
                 else if (userName.Length != 4)
                 {
-                    Console.WriteLine("Sorry, your username must contain FOUR characters");
+                    Console.Write("Sorry, your username must only contain ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("FOUR ");
+                    Console.ResetColor();
+                    Console.Write("characters.");
                     loginCounter++;
                 }
                 else if (!int.TryParse(password, out int pass_word))
                 {
-                    Console.WriteLine("Sorry, your password must only contain NUMBERS.");
+                    Console.Write("Sorry, your password must only contain ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("NUMBERS");
+                    Console.ResetColor();
                     loginCounter++;
                 }
                 if (loginCounter >= 3)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("TOO MANY FAILED ATTEMPTS.");
+                    Console.ResetColor();
                     Console.WriteLine("You are now prohibited from logging in for 10 seconds.");
                     Thread.Sleep(10000);
                     loginCounter = 0;
@@ -75,7 +86,10 @@ namespace grupp_tiger2
             void mainMenu(bank_user user)
             {
                 Console.Clear();
-
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("                         __,,,,_\r\n          _ __..-;''`--/'/ /.',-`-.\r\n      (`/' ` |  \\ \\ \\\\ / / / / .-'/`,_\r\n     /'`\\ \\   |  \\ | \\| // // / -.,/_,'-,\r\n    /<7' ;  \\ \\  | ; ||/ /| | \\/    |`-/,/-.,_,/')\r\n   /  _.-, `,-\\,__|  _-| / \\ \\/|_/  |    '-/.;.\\'\r\n   `-`  f/ ;      / __/ \\__ `/ |__/ |\r\n        `-'      |  -| =|\\_  \\  |-' |\r\n              __/   /_..-' `  ),'  //\r\n             ((__.-'((___..-'' \\__.'");
+                Console.ResetColor();
+                Console.WriteLine();
                 List<string> main_Menu = new List<string>()
                 {
                     "Your accounts and account balance",
@@ -94,7 +108,11 @@ namespace grupp_tiger2
                 bool showMenu = true;
                 while (showMenu)
                 {
-                    Console.WriteLine("Welcome " + user.first_name + " " + user.last_name + " to the Main Menu.");
+                    Console.Write("Welcome ");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write(user.first_name + user.last_name);
+                    Console.ResetColor();
+                    Console.Write(" to the Main Menu.");
                     Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
 
                     if (choices[0] == true)
