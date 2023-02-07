@@ -36,6 +36,11 @@ namespace grupp_tiger2
                     {
                         if (userName == bankUser.username && password == bankUser.pin_code)
                         {
+                            SoundPlayer musicPlayer = new SoundPlayer();
+                            musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\start-computer.wav";
+
+                            musicPlayer.Play();
+
                             userFound = true;
 
                             if (bankUser.role_id == 1 || bankUser.role_id == 3)
@@ -98,7 +103,7 @@ namespace grupp_tiger2
 
                 List<string> main_Menu = new List<string>()
                 {
-                    "Your accounts and account balance",
+                    "Your accounts and balance",
                     "Transfer",
                     "Show transfer log",
                     "Return to login",
@@ -106,9 +111,10 @@ namespace grupp_tiger2
                 };
 
                 SoundPlayer musicPlayer = new SoundPlayer();
-                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\item-received.wav";
+                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
 
                 musicPlayer.Play();
+
 
                 bool[] choices = { true, false, false, false, false };
 
@@ -138,7 +144,7 @@ namespace grupp_tiger2
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.Write("Main Menu\n");
                     Console.ResetColor();
-                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
+                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys) \n");
 
                     if (choices[0] == true)
                     {
@@ -227,7 +233,7 @@ namespace grupp_tiger2
                                 {
                                     if (user.id == account.user_id)
                                     {
-                                        Console.WriteLine($"Your {account.name} balance is: {account.balance}");
+                                        Console.WriteLine($"Your {account.name} account balance: {account.balance}");
                                     }
                                 }
                                 Console.ReadKey();
@@ -240,23 +246,19 @@ namespace grupp_tiger2
                                 int from_account = 0;
                                 int to_account = 0;
                                 Console.WriteLine();
-                                Console.WriteLine("Press '1' or '2' for transfer: ");
-                                Console.WriteLine("1.Between your accounts.");
-                                Console.WriteLine("2.To other customers' accounts.");
+                                Console.WriteLine("Press '1' or '2' for transfer:\n");
+                                Console.WriteLine("1. Between your accounts.");
+                                Console.WriteLine("2. To other customers' accounts.");
 
-                                key = Console.ReadKey();
+                                key = Console.ReadKey(true);
 
                                 if (key.Key == ConsoleKey.D1)
                                 {
                                     foreach (var account in bankAccounts)
                                     {
-                                        if (user.id == account.user_id && account.name == "Debit")
+                                        if (user.id == account.user_id)
                                         {
-                                            Console.WriteLine("Your debit balance is " + account.balance);
-                                        }
-                                        if (user.id == account.user_id && account.name == "Savings")
-                                        {
-                                            Console.WriteLine("Your savings balance is " + account.balance);
+                                            Console.WriteLine($"Your {account.name} account balance: {account.balance}");
                                         }
                                     }
                                     Console.Write("\nPlease select account to transfer from: ");
@@ -409,7 +411,9 @@ namespace grupp_tiger2
                             case 2:
 
                                 var transactions = PostgresDataAccess.LoadTransactions();
-                                Console.WriteLine();
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                Console.WriteLine("\nRegistered transactions:\n");
+                                Console.ResetColor();
                                 foreach (var trans in transactions)
                                 {
                                     Console.WriteLine($"{trans.amount} SEK was transferred at: {trans.timestamp}, From account: {trans.from_account_id}, To account: {trans.to_account_id}");
