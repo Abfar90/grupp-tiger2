@@ -18,5 +18,11 @@
             this.timestamp = timestamp;
             this.amount = amount;
         }
+
+        public bank_transactions()
+        {
+        }
     }
+    
+  
 }
