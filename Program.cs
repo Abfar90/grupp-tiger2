@@ -106,7 +106,7 @@ namespace grupp_tiger2
                     "Your accounts and balance",
                     "Transfer",
                     "Show transfer log",
-                    "Return to login",
+                    "Loans",
                     "Exit"
                 };
 
@@ -424,14 +424,59 @@ namespace grupp_tiger2
 
                             case 3:
 
-                                // Return to login
+                                bankAccounts = PostgresDataAccess.LoadBankAccounts();
+
+                                double totalBalance = 0;
+                                bool canTakeLoan = false;
+
+                                foreach (var account in bankAccounts)
+                                {
+                                    if (user.id == account.user_id)
+                                    {
+                                        totalBalance += account.balance;
+                                    }
+                                }
+
+                                while (canTakeLoan == false)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Would you like to take a loan?\n");
+                                    Console.WriteLine("1. Yes.");
+                                    Console.WriteLine("2. No.");
+
+                                    key = Console.ReadKey(true);
+
+                                    if (key.Key == ConsoleKey.D1)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                                        Console.Write("\nNOTE: ");
+                                        Console.ResetColor();
+                                        Console.Write("You can only loan as much money as FIVE times your total balance.");
+                                        Console.Write("\nEnter loan amount: ");
+                                        double loanAmount = double.Parse(Console.ReadLine());
+                                        if (loanAmount > (totalBalance * 5))
+                                        {
+                                            Console.WriteLine("\nSorry, the amount you entered is above your allowance.");
+                                        }
+                                        else
+                                        {
+                                            PostgresDataAccess.TakeLoan(user, loanAmount);
+                                            canTakeLoan = true;
+                                            break;
+                                        }
+
+                                    }
+                                    else if (key.Key == ConsoleKey.D2)
+                                    {
+                                        break;
+                                    }
+                                }
 
                                 break;
 
                             case 4:
 
-                                // Exit
-
+                                Environment.Exit(0);
                                 break;
                         }
                     }

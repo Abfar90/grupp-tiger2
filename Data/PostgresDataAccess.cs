@@ -28,7 +28,7 @@ namespace grupp_tiger2.Data
             }
         }
 
-        public static List<account> LoadBankAccounts()
+        public static List<bank_account> LoadBankAccounts()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
@@ -36,7 +36,7 @@ namespace grupp_tiger2.Data
             {
                 conn.Open();
 
-                var output = conn.Query<account>("select * from account", new DynamicParameters());
+                var output = conn.Query<bank_account>("select * from bank_account", new DynamicParameters());
                 return output.ToList();
 
             }
@@ -117,7 +117,6 @@ namespace grupp_tiger2.Data
                         ($"VALUES ('{log.from_account_id}', '{log.to_account_id}', '{log.timestamp}', '{log.amount}');");
 
                     cmd.ExecuteNonQuery();
-                    
                 }
             }
         }
@@ -135,7 +134,6 @@ namespace grupp_tiger2.Data
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
-                
                 conn.Open();
 
                 using (var cmd = new NpgsqlCommand())
@@ -152,10 +150,41 @@ namespace grupp_tiger2.Data
                     Console.ResetColor();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
+                }
+            }
+        }
+
+        public static void TakeLoan(bank_user user, double amount)
+        {
+            string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+
+                    string interestRate = "0.12";
+
+                    cmd.CommandText = "BEGIN; " +
+                                      "INSERT INTO \"public\".\"bank_loan\" " +
+                                      "(\"name\", \"interest_rate\", \"user_id\", \"amount\") " + ($"VALUES ('ExpressLoan', '{interestRate}', '{user.id}', '{amount}');") +
+                                      ($"UPDATE bank_account SET balance = balance + '{amount}' WHERE bank_account.name = 'Savings' AND user_id = '{user.id}'; ") +
+                                      "COMMIT;";
+
+                    cmd.ExecuteNonQuery();
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nNew loan registered.\n");
+                    Console.ResetColor();
+                    Console.WriteLine($"You will have to pay {amount * 0.12} SEK in interest for this loan.");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to return to the menu.");
+                    Console.ReadKey();
 
                 }
-
-
             }
         }
     }

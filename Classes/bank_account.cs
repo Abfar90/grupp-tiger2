@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace grupp_tiger2.Classes
 {
-    internal class account
+    internal class bank_account
     {
         public string name { get; set; }
         public double balance { get; set; }
