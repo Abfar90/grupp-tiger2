@@ -1,5 +1,6 @@
 ﻿using grupp_tiger2.Classes;
 using grupp_tiger2.Data;
+using System.Media;
 
 namespace grupp_tiger2
 {
@@ -7,6 +8,7 @@ namespace grupp_tiger2
     {
         static void Main(string[] args)
         {
+
             var bankUsers = PostgresDataAccess.LoadBankUsers();
 
             int loginCounter = 0;
@@ -15,12 +17,17 @@ namespace grupp_tiger2
 
             while (correctLogin == false)
             {
-                Console.WriteLine("Welcome to the Tiger bank");
-
-                Console.WriteLine("Please enter your username.");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("_____  _   __    ____  ___       ___    __    _      _    \r\n | |  | | / /`_ | |_  | |_)     | |_)  / /\\  | |\\ | | |_/ \r\n |_|  |_| \\_\\_/ |_|__ |_| \\     |_|_) /_/--\\ |_| \\| |_| \\ ");
+                Console.ResetColor();
+                Console.WriteLine("\nWelcome!");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("\n- LOGIN -");
+                Console.ResetColor();
+                Console.Write("\nUsername: ");
                 string userName = Console.ReadLine();
 
-                Console.WriteLine("Please enter your password.");
+                Console.Write("\nPassword: ");
                 string password = Console.ReadLine();
 
                 if (int.TryParse(password, out int passWord) && userName.Length == 4)
@@ -29,6 +36,11 @@ namespace grupp_tiger2
                     {
                         if (userName == bankUser.username && password == bankUser.pin_code)
                         {
+                            SoundPlayer musicPlayer = new SoundPlayer();
+                            musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\start-computer.wav";
+
+                            musicPlayer.Play();
+
                             userFound = true;
 
                             if (bankUser.role_id == 1 || bankUser.role_id == 3)
@@ -45,26 +57,39 @@ namespace grupp_tiger2
                     }
                     if (userFound == false)
                     {
+                        Console.Clear();
                         loginCounter++;
-                        Console.WriteLine("Sorry, the entered username or password is incorrect.");
-                        Console.WriteLine("Please try again.");
+                        Console.WriteLine("Sorry, the username/password is incorrect.");
+                        Console.WriteLine("Please try again.\n");
                         correctLogin = false;
                     }
                 }
                 else if (userName.Length != 4)
                 {
-                    Console.WriteLine("Sorry, your username must contain FOUR characters");
+                    Console.Clear();
+                    Console.Write("Sorry, your username must only contain ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("FOUR ");
+                    Console.ResetColor();
+                    Console.Write("characters.\n");
                     loginCounter++;
                 }
                 else if (!int.TryParse(password, out int pass_word))
                 {
-                    Console.WriteLine("Sorry, your password must only contain NUMBERS.");
+                    Console.Clear();
+                    Console.Write("Sorry, your password must only contain ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("NUMBERS\n");
+                    Console.ResetColor();
                     loginCounter++;
                 }
                 if (loginCounter >= 3)
                 {
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("TOO MANY FAILED ATTEMPTS.");
-                    Console.WriteLine("You are now prohibited from logging in for 10 seconds.");
+                    Console.ResetColor();
+                    Console.WriteLine("You are now prohibited from logging in for 10 seconds.\n");
                     Thread.Sleep(10000);
                     loginCounter = 0;
                 }
@@ -78,7 +103,7 @@ namespace grupp_tiger2
 
                 List<string> main_Menu = new List<string>()
                 {
-                    "Your accounts and account balance",
+                    "Your accounts and balance",
                     "Transfer",
                     "Show transfer log",
                     "Open a saving account",
@@ -86,7 +111,17 @@ namespace grupp_tiger2
                     "Exit"
                 };
 
+<<<<<<< HEAD
                 bool[] choices = { true, false, false, false, false, false };
+=======
+                SoundPlayer musicPlayer = new SoundPlayer();
+                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
+
+                musicPlayer.Play();
+
+
+                bool[] choices = { true, false, false, false, false };
+>>>>>>> main
 
                 int x = 0;
 
@@ -95,8 +130,26 @@ namespace grupp_tiger2
                 bool showMenu = true;
                 while (showMenu)
                 {
-                    Console.WriteLine("Welcome " + user.first_name + " " + user.last_name + " to the Main Menu.");
-                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("                         __,,,,_\r\n          _ __..-;''`--/'/ /.',-`-.\r\n      (`/' ` |  \\ \\ \\\\ / / / / .-'/`,_\r\n     /'`\\ \\   |  \\ | \\| // // / -.,/_,'-,\r\n    /<7' ;  \\ \\  | ; ||/ /| | \\/    |`-/,/-.,_,/')\r\n   /  _.-, `,-\\,__|  _-| / \\ \\/|_/  |    '-/.;.\\'\r\n   `-`  f/ ;      / __/ \\__ `/ |__/ |\r\n        `-'      |  -| =|\\_  \\  |-' |\r\n              __/   /_..-' `  ),'  //\r\n             ((__.-'((___..-'' \\__.'");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.Write("Welcome ");
+                    if (user.role_id == 1 || user.role_id == 3)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    Console.Write(user.first_name + " " + user.last_name);
+                    Console.ResetColor();
+                    Console.Write(" to the ");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("Main Menu\n");
+                    Console.ResetColor();
+                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys) \n");
 
                     if (choices[0] == true)
                     {
@@ -179,7 +232,6 @@ namespace grupp_tiger2
                             choices[x] = false;
                             x--;
                         }
-
                     }
 
                     else if (key.Key == ConsoleKey.Enter)
@@ -189,12 +241,12 @@ namespace grupp_tiger2
                             case 0:
 
                                 var bankAccounts = PostgresDataAccess.LoadBankAccounts();
-
+                                Console.WriteLine();
                                 foreach (var account in bankAccounts)
                                 {
                                     if (user.id == account.user_id)
                                     {
-                                        Console.WriteLine($"Your {account.name} balance is: {account.balance}");
+                                        Console.WriteLine($"Your {account.name} account balance: {account.balance}");
                                     }
                                 }
                                 Console.ReadKey();
@@ -206,24 +258,20 @@ namespace grupp_tiger2
 
                                 int from_account = 0;
                                 int to_account = 0;
+                                Console.WriteLine();
+                                Console.WriteLine("Press '1' or '2' for transfer:\n");
+                                Console.WriteLine("1. Between your accounts.");
+                                Console.WriteLine("2. To other customers' accounts.");
 
-                                Console.WriteLine("Press '1' or '2' for transfer: ");
-                                Console.WriteLine("1.Between your accounts.");
-                                Console.WriteLine("2.To other customers' accounts.");
-
-                                key = Console.ReadKey();
+                                key = Console.ReadKey(true);
 
                                 if (key.Key == ConsoleKey.D1)
                                 {
                                     foreach (var account in bankAccounts)
                                     {
-                                        if (user.id == account.user_id && account.name == "Debit")
+                                        if (user.id == account.user_id)
                                         {
-                                            Console.WriteLine("Your debit balance is " + account.balance);
-                                        }
-                                        if (user.id == account.user_id && account.name == "Savings")
-                                        {
-                                            Console.WriteLine("Your savings balance is " + account.balance);
+                                            Console.WriteLine($"Your {account.name} account balance: {account.balance}");
                                         }
                                     }
                                     Console.Write("\nPlease select account to transfer from: ");
@@ -376,13 +424,14 @@ namespace grupp_tiger2
                             case 2:
 
                                 var transactions = PostgresDataAccess.LoadTransactions();
-
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                Console.WriteLine("\nRegistered transactions:\n");
+                                Console.ResetColor();
                                 foreach (var trans in transactions)
                                 {
                                     Console.WriteLine($"{trans.amount} SEK was transferred at: {trans.timestamp}, From account: {trans.from_account_id}, To account: {trans.to_account_id}");
                                 }
                                 Console.ReadKey();
-                                // Show transfer log
 
                                 break;
 
@@ -421,8 +470,8 @@ namespace grupp_tiger2
                 List<string> main_Menu = new List<string>()
                 {
                     "Show all customers",
-                    "Create new customer account",
-                    "Return to main menu",
+                    "Create new customer",
+                    "Customer main menu",
                     "Exit"
                 };
                 bool[] choices = { true, false, false, false };
@@ -433,11 +482,23 @@ namespace grupp_tiger2
 
                 while (showMenu)
                 {
+<<<<<<< HEAD
                     Console.WriteLine("Welcome to the Admin Menu. From here you will be able to view all" +
                         "customer accounts and create a new customer");
                     Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
+=======
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine("  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ ");
+                    Console.ResetColor();
+                    Console.WriteLine();
 
-                    //Booleans bestämmer vilket menyval som är markerat
+                    Console.Write("\nCurrently logged in as: ");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write(admin.first_name + " " + admin.last_name);
+                    Console.ResetColor();
+                    Console.WriteLine("\n");
+>>>>>>> main
+
                     if (choices[0] == true)
                     {
                         Console.WriteLine("[ " + main_Menu[0] + " ]");
@@ -473,7 +534,6 @@ namespace grupp_tiger2
 
                     ConsoleKeyInfo key = Console.ReadKey();
 
-                    // Navigering med 'upp' och 'ned' tangenter
                     if (key.Key == ConsoleKey.DownArrow)
                     {
                         if (x == 3)
@@ -513,11 +573,22 @@ namespace grupp_tiger2
                         if (x == 0)
                         {
                             var bankUsers = PostgresDataAccess.LoadBankUsers();
-
+                            Console.WriteLine();
                             foreach (var customer in bankUsers)
                             {
+<<<<<<< HEAD
                                 Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
 
+=======
+                                if (customer.role_id == 2)
+                                {
+                                    Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Admin: {customer.first_name}, {customer.last_name}");
+                                }
+>>>>>>> main
                             }
                             Console.ReadKey();
                             // Show all accounts
@@ -527,17 +598,20 @@ namespace grupp_tiger2
                             bank_user newUser = new bank_user();
                             newUser.role_id = 2;
                             newUser.branch_id = 1;
-
-                            Console.WriteLine("Enter first name");
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine("Creating new user.");
+                            Console.ResetColor();
+                            Console.Write("\nSet first name: ");
                             newUser.first_name = Console.ReadLine();
 
-                            Console.WriteLine("Enter last name");
+                            Console.Write("\nSet last name: ");
                             newUser.last_name = Console.ReadLine();
 
-                            Console.WriteLine("Enter username");
+                            Console.Write("\nSet username: ");
                             newUser.username = Console.ReadLine();
 
-                            Console.WriteLine("Enter pincode");
+                            Console.Write("\nSet password: ");
                             newUser.pin_code = Console.ReadLine();
 
                             PostgresDataAccess.CreateUser(newUser);
@@ -545,12 +619,10 @@ namespace grupp_tiger2
                         else if (x == 2)
                         {
                             mainMenu(admin);
-                            // return to main menu
                         }
                         else if (x == 3)
                         {
                             Environment.Exit(0);
-                            // exit
                         }
                     }
                     Console.Clear();
