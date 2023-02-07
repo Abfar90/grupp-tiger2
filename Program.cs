@@ -387,8 +387,10 @@ namespace grupp_tiger2
                                 break;
 
                             case 3:
-
-                                Console.Write("Please enter the amount you want to deposit in your savingaccount: ");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("\n\nSmartSave – 1% for one year.");
+                                Console.ResetColor();
+                                Console.WriteLine("\nPlease enter the amount you want to deposit in your savingaccount: ");
                                 double savingAmount = double.Parse(Console.ReadLine());
 
                                 PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);

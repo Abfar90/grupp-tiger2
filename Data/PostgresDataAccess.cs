@@ -116,7 +116,7 @@ namespace grupp_tiger2.Data
             }
         }
 
-        // Create a function to open a new savings account for a user and add ask for the initial deposit
+        //Create a function to open a new savings account for a user and add ask for the initial deposit
         public static void CreateSavingsAccount(int id, double initialDeposit)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
@@ -128,7 +128,7 @@ namespace grupp_tiger2.Data
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = conn;
-                    cmd.CommandText = "INSERT INTO account (user_id, balance, name, interest_rate, currency_id) VALUES (@id, @initialDeposit, 'Savings', 0.01, 5);";
+                    cmd.CommandText = "INSERT INTO bank_account (user_id, balance, name, interest_rate, currency_id) VALUES (@id, @initialDeposit, 'Savings', 0.01, 5);";
 
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@initialDeposit", initialDeposit);
@@ -136,9 +136,9 @@ namespace grupp_tiger2.Data
                     cmd.ExecuteNonQuery();
 
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Account created.");
+                    Console.WriteLine("\nYour SmartSave account with 1% per year are created.");
                     Console.ResetColor();
-                    Console.WriteLine("Press any key to return to the menu.");
+                    Console.WriteLine("\nPress any key to return to the menu.");
                     Console.ReadKey();
                 }
             }
