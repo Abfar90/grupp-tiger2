@@ -30,16 +30,12 @@ namespace grupp_tiger2.Data
 
         public static List<account> LoadBankAccounts()
         {
-            // This is the connection string from the app.config file, and "postgres" is the name of the connection string
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
-            // using is a C# feature that automatically closes the connection when the code inside the block is done
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
-                // Opens the connection to the database
                 conn.Open();
 
-                // This is the Dapper method that executes the query and returns a list of bank_user objects
                 var output = conn.Query<account>("select * from account", new DynamicParameters());
                 return output.ToList();
 
@@ -48,16 +44,12 @@ namespace grupp_tiger2.Data
 
         public static List<bank_user> LoadBankRoles()
         {
-            // This is the connection string from the app.config file, and "postgres" is the name of the connection string
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
-            // using is a C# feature that automatically closes the connection when the code inside the block is done
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
-                // Opens the connection to the database
                 conn.Open();
 
-                // This is the Dapper method that executes the query and returns a list of bank_user objects
                 var output = conn.Query<bank_user>("select * from bank_user", new DynamicParameters());
                 return output.ToList();
             }
@@ -65,16 +57,12 @@ namespace grupp_tiger2.Data
 
         public static List<bank_transactions> LoadTransactions()
         {
-            // This is the connection string from the app.config file, and "postgres" is the name of the connection string
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
 
-            // using is a C# feature that automatically closes the connection when the code inside the block is done
             using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
             {
-                // Opens the connection to the database
                 conn.Open();
 
-                // This is the Dapper method that executes the query and returns a list of bank_user objects
                 var output = conn.Query<bank_transactions>("select * from bank_transactions", new DynamicParameters());
                 return output.ToList();
 
@@ -93,14 +81,9 @@ namespace grupp_tiger2.Data
                 {
                     cmd.Connection = conn;
                     cmd.CommandText = "BEGIN; " +
-                                      "UPDATE account SET balance = balance - @amount WHERE account_id = @from_account AND user_id = @id; " +
-                                      "UPDATE account SET balance = balance + @amount WHERE account_id = @to_account; " +
+                                      ($"UPDATE account SET balance = balance - '{amount}' WHERE account_id = '{from_account}' AND user_id = '{id}'; ") +
+                                      ($"UPDATE account SET balance = balance + '{amount}' WHERE account_id = '{to_account}'; ") +
                                       "COMMIT;";
-
-                    cmd.Parameters.AddWithValue("@from_account", from_account);
-                    cmd.Parameters.AddWithValue("@to_account", to_account);
-                    cmd.Parameters.AddWithValue("@amount", amount);
-                    cmd.Parameters.AddWithValue("@id", id);
 
                     DateTime timeOfTransaction = DateTime.Now;
                     bank_transactions log = new bank_transactions(id, from_account, to_account, timeOfTransaction.ToString(), amount);
@@ -109,7 +92,7 @@ namespace grupp_tiger2.Data
                     cmd.ExecuteNonQuery();
 
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Transaction Complete.");
+                    Console.WriteLine("\nTransaction Complete.\n");
                     Console.ResetColor();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
@@ -131,13 +114,7 @@ namespace grupp_tiger2.Data
 
                     cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
                         "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
-                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
-
-                    cmd.Parameters.AddWithValue("@id", log.id);
-                    cmd.Parameters.AddWithValue("@from_account", log.from_account_id);
-                    cmd.Parameters.AddWithValue("@to_account", log.to_account_id);
-                    cmd.Parameters.AddWithValue("@timestamp", log.timestamp);
-                    cmd.Parameters.AddWithValue("@amount", log.amount);
+                        ($"VALUES ('{log.from_account_id}', '{log.to_account_id}', '{log.timestamp}', '{log.amount}');");
 
                     cmd.ExecuteNonQuery();
                     
@@ -165,25 +142,20 @@ namespace grupp_tiger2.Data
                 {
                     cmd.Connection = conn;
 
-                    cmd.Parameters.AddWithValue("@firstname", user.first_name);
-                    cmd.Parameters.AddWithValue("@lastname", user.last_name);
-                    cmd.Parameters.AddWithValue("@pincode", user.pin_code);
-                    cmd.Parameters.AddWithValue("@roleid", user.role_id);
-                    cmd.Parameters.AddWithValue("@branchid", user.branch_id);
-                    cmd.Parameters.AddWithValue("@username", user.username);
-
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
-                        "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
-                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
-
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," + 
-                        " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
+                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\", \"username\") " +
+                        ($"VALUES ('{user.first_name}', '{user.last_name}', '{user.pin_code}', '{user.role_id}', '{user.branch_id}', '{user.username}');");
 
                     cmd.ExecuteNonQuery();
 
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nNew user registered.\n");
+                    Console.ResetColor();
+                    Console.WriteLine("Press any key to return to the menu.");
+                    Console.ReadKey();
+
                 }
 
-                
+
             }
         }
     }
