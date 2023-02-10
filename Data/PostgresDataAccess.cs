@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using Dapper;
 using grupp_tiger2.Classes;
@@ -158,5 +159,26 @@ namespace grupp_tiger2.Data
 
             }
         }
+
+        public static void ChangeCurrency(double newRate, int currencyID)
+        {
+            string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+
+                    cmd.CommandText = $"UPDATE bank_currency SET exchange_rate = '{newRate}' WHERE id = '{currencyID}';";
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
     }
 }

@@ -36,10 +36,10 @@ namespace grupp_tiger2
                     {
                         if (userName == bankUser.username && password == bankUser.pin_code)
                         {
-                            SoundPlayer musicPlayer = new SoundPlayer();
-                            musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\start-computer.wav";
+                            //SoundPlayer musicPlayer = new SoundPlayer();
+                            //musicPlayer.SoundLocation = @"C:\Users\abdir\source\repos\grupp-tiger2\Music\start-computer.wav";
 
-                            musicPlayer.Play();
+                            //musicPlayer.Play();
 
                             userFound = true;
 
@@ -110,10 +110,10 @@ namespace grupp_tiger2
                     "Exit"
                 };
 
-                SoundPlayer musicPlayer = new SoundPlayer();
-                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
+                //SoundPlayer musicPlayer = new SoundPlayer();
+                //musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
 
-                musicPlayer.Play();
+                //musicPlayer.Play();
 
 
                 bool[] choices = { true, false, false, false, false };
@@ -448,10 +448,11 @@ namespace grupp_tiger2
                 {
                     "Show all customers",
                     "Create new customer",
+                    "Update exchange rate",
                     "Customer main menu",
                     "Exit"
                 };
-                bool[] choices = { true, false, false, false};
+                bool[] choices = { true, false, false, false, false};
 
                 int x = 0;
 
@@ -502,12 +503,20 @@ namespace grupp_tiger2
                     {
                         Console.WriteLine(" " + " " + main_Menu[3]);
                     }
+                    if (choices[4] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[4] + " ]");
+                    }
+                    else if (choices[4] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[4]);
+                    }
 
                     ConsoleKeyInfo key = Console.ReadKey();
 
                     if (key.Key == ConsoleKey.DownArrow)
                     {
-                        if (x == 3)
+                        if (x == 4)
                         {
                             choices[0] = true;
                             choices[x] = false;
@@ -525,9 +534,9 @@ namespace grupp_tiger2
                     {
                         if (x == 0)
                         {
-                            choices[3] = true;
+                            choices[4] = true;
                             choices[x] = false;
-                            x = 3;
+                            x = 4;
                         }
                         else
                         {
@@ -584,9 +593,40 @@ namespace grupp_tiger2
                         }
                         else if (x == 2)
                         {
-                            mainMenu(admin);
+                            Console.WriteLine("Enter id of the currency you would like to update (GBP = 2, EUR = 3, USD = 4)");
+                            int currencyID = int.Parse(Console.ReadLine());
+                            string currency = "";
+
+                            switch (currencyID)
+                            {
+                                case 2:
+                                    currency = "GBP";
+                                    break;
+
+                                case 3:
+                                    currency = "EUR";
+                                    break;
+                                case 4:
+                                    currency = "USD";
+                                    break;
+
+                            }
+
+                            Console.WriteLine("Enter new exchange rate in relation to SEK");
+                            double newRate = double.Parse(Console.ReadLine());
+
+                            PostgresDataAccess.ChangeCurrency(newRate, currencyID);
+
+                            Console.Clear();
+
+                            Console.WriteLine($"{currency} succesfully updated to {newRate} SEK/GBP!");
+                            Console.ReadLine();
                         }
                         else if (x == 3)
+                        {
+                            mainMenu(admin);
+                        }
+                        else if (x == 4)
                         {
                             Environment.Exit(0);
                         }
