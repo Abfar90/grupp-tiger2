@@ -217,7 +217,7 @@ namespace grupp_tiger2.Data
 
                     cmd.CommandText = "BEGIN; " +
                                       "INSERT INTO \"public\".\"bank_loan\" " +
-                                      "(\"name\", \"interest_rate\", \"user_id\", \"amount\") " + 
+                                      "(\"name\", \"interest_rate\", \"user_id\", \"amount\") " +
                                       ($"VALUES ('ExpressLoan', '{interestRate}', '{user.id}', '{amount}');") +
                                       ($"UPDATE bank_account SET balance = balance + '{amount}' WHERE bank_account.name = 'Savings' AND user_id = '{user.id}'; ") +
                                       "COMMIT;";
@@ -231,6 +231,7 @@ namespace grupp_tiger2.Data
                     Console.WriteLine();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
+                }
 
             }
         }
@@ -246,19 +247,16 @@ namespace grupp_tiger2.Data
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = conn;
-
-                }
-            }
-        }
-    }
-}
+                    
                     cmd.CommandText = $"UPDATE bank_currency SET exchange_rate = '{newRate}' WHERE id = '{currencyID}';";
 
                     cmd.ExecuteNonQuery();
 
                 }
+                
             }
-        }
 
+        }
     }
 }
+                 
