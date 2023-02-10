@@ -170,7 +170,8 @@ namespace grupp_tiger2.Data
 
                     cmd.CommandText = "BEGIN; " +
                                       "INSERT INTO \"public\".\"bank_loan\" " +
-                                      "(\"name\", \"interest_rate\", \"user_id\", \"amount\") " + ($"VALUES ('ExpressLoan', '{interestRate}', '{user.id}', '{amount}');") +
+                                      "(\"name\", \"interest_rate\", \"user_id\", \"amount\") " + 
+                                      ($"VALUES ('ExpressLoan', '{interestRate}', '{user.id}', '{amount}');") +
                                       ($"UPDATE bank_account SET balance = balance + '{amount}' WHERE bank_account.name = 'Savings' AND user_id = '{user.id}'; ") +
                                       "COMMIT;";
 

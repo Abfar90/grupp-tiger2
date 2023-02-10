@@ -1,6 +1,7 @@
 ﻿using grupp_tiger2.Classes;
 using grupp_tiger2.Data;
 using System.Media;
+using Spectre.Console;
 
 namespace grupp_tiger2
 {
@@ -477,7 +478,6 @@ namespace grupp_tiger2
                             case 4:
 
                                 Environment.Exit(0);
-                                break;
                         }
                     }
                     Console.Clear();
