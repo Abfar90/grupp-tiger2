@@ -106,10 +106,14 @@ namespace grupp_tiger2
                     "Your accounts and balance",
                     "Transfer",
                     "Show transfer log",
+                    "Open a saving account",
                     "Return to login",
                     "Exit"
                 };
 
+<<<<<<< HEAD
+                bool[] choices = { true, false, false, false, false, false };
+=======
                 SoundPlayer musicPlayer = new SoundPlayer();
                 musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
 
@@ -117,6 +121,7 @@ namespace grupp_tiger2
 
 
                 bool[] choices = { true, false, false, false, false };
+>>>>>>> main
 
                 int x = 0;
 
@@ -186,12 +191,20 @@ namespace grupp_tiger2
                     {
                         Console.WriteLine(" " + " " + main_Menu[4]);
                     }
+                    if (choices[5] == true)
+                    {
+                        Console.WriteLine("[ " + main_Menu[5] + " ]");
+                    }
+                    else if (choices[5] == false)
+                    {
+                        Console.WriteLine(" " + " " + main_Menu[5]);
+                    }
 
                     ConsoleKeyInfo key = Console.ReadKey();
 
                     if (key.Key == ConsoleKey.DownArrow)
                     {
-                        if (x == 4)
+                        if (x == 5)
                         {
                             choices[0] = true;
                             choices[x] = false;
@@ -209,9 +222,9 @@ namespace grupp_tiger2
                     {
                         if (x == 0)
                         {
-                            choices[4] = true;
+                            choices[5] = true;
                             choices[x] = false;
-                            x = 4;
+                            x = 5;
                         }
                         else
                         {
@@ -380,7 +393,7 @@ namespace grupp_tiger2
                                     }
 
                                     bool canTransfer = false;
-                                    
+
                                     while (!canTransfer)
                                     {
                                         Console.Write("Please select amount to transfer: ");
@@ -420,15 +433,25 @@ namespace grupp_tiger2
                                 }
                                 Console.ReadKey();
 
-                                break; 
+                                break;
 
                             case 3:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("\n\nSmartSave – 1% for one year.");
+                                Console.ResetColor();
+                                Console.WriteLine("\nPlease enter the amount you want to deposit in your savingaccount: ");
+                                double savingAmount = double.Parse(Console.ReadLine());
 
+                                PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);
                                 // Return to login
 
                                 break;
 
                             case 4:
+                                // call the CreateSavingsAccount method
+
+
+
 
                                 // Exit
 
@@ -451,7 +474,7 @@ namespace grupp_tiger2
                     "Customer main menu",
                     "Exit"
                 };
-                bool[] choices = { true, false, false, false};
+                bool[] choices = { true, false, false, false };
 
                 int x = 0;
 
@@ -459,6 +482,11 @@ namespace grupp_tiger2
 
                 while (showMenu)
                 {
+<<<<<<< HEAD
+                    Console.WriteLine("Welcome to the Admin Menu. From here you will be able to view all" +
+                        "customer accounts and create a new customer");
+                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
+=======
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ ");
                     Console.ResetColor();
@@ -469,6 +497,7 @@ namespace grupp_tiger2
                     Console.Write(admin.first_name + " " + admin.last_name);
                     Console.ResetColor();
                     Console.WriteLine("\n");
+>>>>>>> main
 
                     if (choices[0] == true)
                     {
@@ -547,6 +576,10 @@ namespace grupp_tiger2
                             Console.WriteLine();
                             foreach (var customer in bankUsers)
                             {
+<<<<<<< HEAD
+                                Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
+
+=======
                                 if (customer.role_id == 2)
                                 {
                                     Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
@@ -555,6 +588,7 @@ namespace grupp_tiger2
                                 {
                                     Console.WriteLine($"Admin: {customer.first_name}, {customer.last_name}");
                                 }
+>>>>>>> main
                             }
                             Console.ReadKey();
                             // Show all accounts

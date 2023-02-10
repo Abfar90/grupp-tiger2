@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Configuration;
+﻿using System.Configuration;
 using Dapper;
 using grupp_tiger2.Classes;
 using Npgsql;
@@ -100,6 +99,34 @@ namespace grupp_tiger2.Data
             }
         }
 
+        //Create a function to open a new savings account for a user and add ask for the initial deposit
+        public static void CreateSavingsAccount(int id, double initialDeposit)
+        {
+            string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO bank_account (user_id, balance, name, interest_rate, currency_id) VALUES (@id, @initialDeposit, 'Savings', 0.01, 5);";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@initialDeposit", initialDeposit);
+
+                    cmd.ExecuteNonQuery();
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\nYour SmartSave account with 1% per year are created.");
+                    Console.ResetColor();
+                    Console.WriteLine("\nPress any key to return to the menu.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
         public static void logTransfer(bank_transactions log)
         {
             string connString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
@@ -117,7 +144,7 @@ namespace grupp_tiger2.Data
                         ($"VALUES ('{log.from_account_id}', '{log.to_account_id}', '{log.timestamp}', '{log.amount}');");
 
                     cmd.ExecuteNonQuery();
-                    
+
                 }
             }
         }
@@ -135,15 +162,31 @@ namespace grupp_tiger2.Data
 
             using (var conn = new NpgsqlConnection(connectionString))
             {
-                
+
                 conn.Open();
 
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = conn;
 
+<<<<<<< HEAD
+                    cmd.Parameters.AddWithValue("@firstname", user.first_name);
+                    cmd.Parameters.AddWithValue("@lastname", user.last_name);
+                    cmd.Parameters.AddWithValue("@pincode", user.pin_code);
+                    cmd.Parameters.AddWithValue("@roleid", user.role_id);
+                    cmd.Parameters.AddWithValue("@branchid", user.branch_id);
+                    cmd.Parameters.AddWithValue("@username", user.username);
+
+                    cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
+                        "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
+                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
+
+                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," +
+                        " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
+=======
                     cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\", \"username\") " +
                         ($"VALUES ('{user.first_name}', '{user.last_name}', '{user.pin_code}', '{user.role_id}', '{user.branch_id}', '{user.username}');");
+>>>>>>> main
 
                     cmd.ExecuteNonQuery();
 
