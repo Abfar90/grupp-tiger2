@@ -1,6 +1,7 @@
 ﻿using grupp_tiger2.Classes;
 using grupp_tiger2.Data;
 using System.Media;
+using Spectre.Console;
 
 namespace grupp_tiger2
 {
@@ -107,21 +108,17 @@ namespace grupp_tiger2
                     "Transfer",
                     "Show transfer log",
                     "Open a saving account",
-                    "Return to login",
+                    "Loans",
                     "Exit"
                 };
 
-<<<<<<< HEAD
+
                 bool[] choices = { true, false, false, false, false, false };
-=======
+
                 SoundPlayer musicPlayer = new SoundPlayer();
                 musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
 
                 musicPlayer.Play();
-
-
-                bool[] choices = { true, false, false, false, false };
->>>>>>> main
 
                 int x = 0;
 
@@ -444,18 +441,66 @@ namespace grupp_tiger2
 
                                 PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);
                                 // Return to login
+                                
 
                                 break;
 
                             case 4:
-                                // call the CreateSavingsAccount method
+                                bankAccounts = PostgresDataAccess.LoadBankAccounts();
 
+                                double totalBalance = 0;
+                                bool canTakeLoan = false;
 
+                                foreach (var account in bankAccounts)
+                                {
+                                    if (user.id == account.user_id)
+                                    {
+                                        totalBalance += account.balance;
+                                    }
+                                }
 
+                                while (canTakeLoan == false)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Would you like to take a loan?\n");
+                                    Console.WriteLine("1. Yes.");
+                                    Console.WriteLine("2. No.");
 
-                                // Exit
+                                    key = Console.ReadKey(true);
 
+                                    if (key.Key == ConsoleKey.D1)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                                        Console.Write("\nNOTE: ");
+                                        Console.ResetColor();
+                                        Console.Write("You can only loan as much money as FIVE times your total balance.");
+                                        Console.Write("\nEnter loan amount: ");
+                                        double loanAmount = double.Parse(Console.ReadLine());
+                                        if (loanAmount > (totalBalance * 5))
+                                        {
+                                            Console.WriteLine("\nSorry, the amount you entered is above your allowance.");
+                                        }
+                                        else
+                                        {
+                                            PostgresDataAccess.TakeLoan(user, loanAmount);
+                                            canTakeLoan = true;
+                                            break;
+                                        }
+
+                                    }
+                                    else if (key.Key == ConsoleKey.D2)
+                                    {
+                                        break;
+                                    }
+                                }
                                 break;
+
+                            case 5:
+                                Environment.Exit(0);
+                                break;
+
+
+
                         }
                     }
                     Console.Clear();
@@ -482,11 +527,7 @@ namespace grupp_tiger2
 
                 while (showMenu)
                 {
-<<<<<<< HEAD
-                    Console.WriteLine("Welcome to the Admin Menu. From here you will be able to view all" +
-                        "customer accounts and create a new customer");
-                    Console.WriteLine("\n(You can navigate through the menu with the 'up' and 'down' arrow keys): \n");
-=======
+
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine("  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ ");
                     Console.ResetColor();
@@ -497,7 +538,7 @@ namespace grupp_tiger2
                     Console.Write(admin.first_name + " " + admin.last_name);
                     Console.ResetColor();
                     Console.WriteLine("\n");
->>>>>>> main
+
 
                     if (choices[0] == true)
                     {
@@ -576,10 +617,10 @@ namespace grupp_tiger2
                             Console.WriteLine();
                             foreach (var customer in bankUsers)
                             {
-<<<<<<< HEAD
+
                                 Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
 
-=======
+
                                 if (customer.role_id == 2)
                                 {
                                     Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
@@ -588,7 +629,7 @@ namespace grupp_tiger2
                                 {
                                     Console.WriteLine($"Admin: {customer.first_name}, {customer.last_name}");
                                 }
->>>>>>> main
+
                             }
                             Console.ReadKey();
                             // Show all accounts
