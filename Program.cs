@@ -18,10 +18,28 @@ namespace grupp_tiger2
 
             while (correctLogin == false)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("_____  _   __    ____  ___       ___    __    _      _    \r\n | |  | | / /`_ | |_  | |_)     | |_)  / /\\  | |\\ | | |_/ \r\n |_|  |_| \\_\\_/ |_|__ |_| \\     |_|_) /_/--\\ |_| \\| |_| \\ ");
-                Console.ResetColor();
-                Console.WriteLine("\nWelcome!");
+                var table = new Table();
+                table.Border = TableBorder.Simple;
+                
+                AnsiConsole.Live(table)
+                    .Start(ctx =>
+                    {
+                        table.AddColumn("[yellow]WELCOME[/]");
+                        ctx.Refresh();
+                        Thread.Sleep(1000);
+
+                        table.AddColumn("[yellow]TO[/]");
+                        ctx.Refresh();
+                        Thread.Sleep(1000);
+
+                        table.AddColumn("[yellow]THE[/] ");
+                        ctx.Refresh();
+                        Thread.Sleep(1000);
+                    });
+
+                AnsiConsole.Markup("[slowblink][yellow]_____  _   __    ____  ___       ___    __    _      _    \r\n | |  | | / /`_ | |_  | |_)     | |_)  / /\\  | |\\ | | |_/ \r\n |_|  |_| \\_\\_/ |_|__ |_| \\     |_|_) /_/--\\ |_| \\| |_| \\ [/][/]");
+                Console.WriteLine();
+                Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("\n- LOGIN -");
                 Console.ResetColor();
@@ -520,7 +538,7 @@ namespace grupp_tiger2
                     "Customer main menu",
                     "Exit"
                 };
-                bool[] choices = { true, false, false, false };
+                bool[] choices = { true, false, false, false, false };
 
                 int x = 0;
 
@@ -529,9 +547,7 @@ namespace grupp_tiger2
                 while (showMenu)
                 {
 
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine("  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ ");
-                    Console.ResetColor();
+                    AnsiConsole.Markup("[slowblink][magenta]  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ [/][/]");
                     Console.WriteLine();
 
                     Console.Write("\nCurrently logged in as: ");

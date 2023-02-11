@@ -4,6 +4,7 @@ using System.Configuration;
 using Dapper;
 using grupp_tiger2.Classes;
 using Npgsql;
+using Spectre.Console;
 namespace grupp_tiger2.Data
 {
     internal class PostgresDataAccess
@@ -82,21 +83,39 @@ namespace grupp_tiger2.Data
                 {
                     cmd.Connection = conn;
                     cmd.CommandText = "BEGIN; " +
-                                      ($"UPDATE account SET balance = balance - '{amount}' WHERE account_id = '{from_account}' AND user_id = '{id}'; ") +
-                                      ($"UPDATE account SET balance = balance + '{amount}' WHERE account_id = '{to_account}'; ") +
+                                      ($"UPDATE bank_account SET balance = balance - '{amount}' WHERE account_id = '{from_account}' AND user_id = '{id}'; ") +
+                                      ($"UPDATE bank_account SET balance = balance + '{amount}' WHERE account_id = '{to_account}'; ") +
                                       "COMMIT;";
 
                     DateTime timeOfTransaction = DateTime.Now;
                     bank_transactions log = new bank_transactions(id, from_account, to_account, timeOfTransaction.ToString(), amount);
                     logTransfer(log);
 
-                    cmd.ExecuteNonQuery();
+                    AnsiConsole.Progress()
+                            .AutoClear(true)
+                            .StartAsync(async ctx =>
+                            {
+                                // Define tasks
+                                var task1 = ctx.AddTask("[green]Connecting to the server...[/]");
 
+                                while (!ctx.IsFinished)
+                                {
+                                    await Task.Delay(80);
+
+                                    task1.Increment(2.8);
+                                    
+                                }
+                                
+                            });
+
+                    Thread.Sleep(4000);
+                    cmd.ExecuteNonQuery();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nTransaction Complete.\n");
                     Console.ResetColor();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
+
                 }
             }
         }
