@@ -2,6 +2,7 @@
 using grupp_tiger2.Data;
 using System.Media;
 using Spectre.Console;
+using System.Security.Principal;
 
 namespace grupp_tiger2
 {
@@ -24,15 +25,15 @@ namespace grupp_tiger2
                 AnsiConsole.Live(table)
                     .Start(ctx =>
                     {
-                        table.AddColumn("[yellow]WELCOME[/]");
+                        table.AddColumn("[olive]WELCOME[/]");
                         ctx.Refresh();
                         Thread.Sleep(1000);
 
-                        table.AddColumn("[yellow]TO[/]");
+                        table.AddColumn("[olive]TO[/]");
                         ctx.Refresh();
                         Thread.Sleep(1000);
 
-                        table.AddColumn("[yellow]THE[/] ");
+                        table.AddColumn("[olive]THE[/] ");
                         ctx.Refresh();
                         Thread.Sleep(1000);
                     });
@@ -133,8 +134,8 @@ namespace grupp_tiger2
 
                 bool[] choices = { true, false, false, false, false, false };
 
-                SoundPlayer musicPlayer = new SoundPlayer();
-                musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
+                //SoundPlayer musicPlayer = new SoundPlayer();
+                //musicPlayer.SoundLocation = @"C:\Users\Timpa\source\repos\grupp-tiger2\Music\lovely-boot.wav";
 
                 //musicPlayer.Play();
 
@@ -145,11 +146,9 @@ namespace grupp_tiger2
                 bool showMenu = true;
                 while (showMenu)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("                         __,,,,_\r\n          _ __..-;''`--/'/ /.',-`-.\r\n      (`/' ` |  \\ \\ \\\\ / / / / .-'/`,_\r\n     /'`\\ \\   |  \\ | \\| // // / -.,/_,'-,\r\n    /<7' ;  \\ \\  | ; ||/ /| | \\/    |`-/,/-.,_,/')\r\n   /  _.-, `,-\\,__|  _-| / \\ \\/|_/  |    '-/.;.\\'\r\n   `-`  f/ ;      / __/ \\__ `/ |__/ |\r\n        `-'      |  -| =|\\_  \\  |-' |\r\n              __/   /_..-' `  ),'  //\r\n             ((__.-'((___..-'' \\__.'");
-                    Console.ResetColor();
+                    AnsiConsole.Markup("[slowblink][yellow]                         __,,,,_\r\n          _ __..-;''`--/'/ /.',-`-.\r\n      (`/' ` |  \\ \\ \\\\ / / / / .-'/`,_\r\n     /'`\\ \\   |  \\ | \\| // // / -.,/_,'-,\r\n    /<7' ;  \\ \\  | ; ||/ /| | \\/    |`-/,/-.,_,/')\r\n   /  _.-, `,-\\,__|  _-| / \\ \\/|_/  |    '-/.;.\\'\r\n   `-`  f/ ;      / __/ \\__ `/ |__/ |\r\n        `-'      |  -| =|\\_  \\  |-' |\r\n              __/   /_..-' `  ),'  //\r\n             ((__.-'((___..-'' \\__.'[/][/]");
                     Console.WriteLine();
-                    Console.Write("Welcome ");
+                    Console.Write("\nWelcome ");
                     if (user.role_id == 1 || user.role_id == 3)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -256,14 +255,19 @@ namespace grupp_tiger2
                             case 0:
 
                                 var bankAccounts = PostgresDataAccess.LoadBankAccounts();
+                                var showTable = new Table();
+                                showTable.Border = TableBorder.HeavyHead;
+                                showTable.AddColumn("Account");
+                                showTable.AddColumn(new TableColumn("Balance").Centered());
                                 Console.WriteLine();
                                 foreach (var account in bankAccounts)
                                 {
                                     if (user.id == account.user_id)
                                     {
-                                        Console.WriteLine($"Your {account.name} account balance: {account.balance}");
+                                        showTable.AddRow($"{account.name}", $"{account.balance}");
                                     }
                                 }
+                                AnsiConsole.Write(showTable);
                                 Console.ReadKey();
                                 break;
 
@@ -439,13 +443,48 @@ namespace grupp_tiger2
                             case 2:
 
                                 var transactions = PostgresDataAccess.LoadTransactions();
+                                var accountNames = PostgresDataAccess.LoadBankAccounts();
+
+                                var transferTable = new Table();
+                                transferTable.Border = TableBorder.Rounded;
+                                transferTable.AddColumn("[green4]Amount[/]");
+                                transferTable.AddColumn(new TableColumn("[blue1]Currency[/]").Centered());
+                                transferTable.AddColumn(new TableColumn("[darkorange]Time[/]").Centered());
+                                transferTable.AddColumn(new TableColumn("[steelblue]From account[/]").Centered());
+                                transferTable.AddColumn(new TableColumn("[orchid2]To account[/]").Centered());
+
                                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                                 Console.WriteLine("\nRegistered transactions:\n");
                                 Console.ResetColor();
+                                string fromAccount = "";
+                                string toAccount = "";
+                                string fromUser = "";
+                                string toUser = "";
+                                
                                 foreach (var trans in transactions)
                                 {
-                                    Console.WriteLine($"{trans.amount} SEK was transferred at: {trans.timestamp}, From account: {trans.from_account_id}, To account: {trans.to_account_id}");
+                                    foreach (var n in accountNames)
+                                    {
+                                        foreach(var u in bankUsers)
+                                        {
+                                            if (trans.from_account_id == n.account_id && n.user_id == u.id)
+                                            {
+                                                fromAccount = n.name;
+                                                fromUser = u.first_name;
+                                            }
+                                            else if (trans.to_account_id == n.account_id && n.user_id == u.id)
+                                            {
+                                                toAccount = n.name;
+                                                toUser = u.first_name;
+                                            }
+                                        }
+                                    }
+
+                                    transferTable.AddRow($"{trans.amount}", "SEK", $"{trans.timestamp}", $"{fromUser}: {fromAccount}", $"{toUser}: {toAccount}");
+                                    //Console.WriteLine($"{trans.amount} SEK was transferred at: {trans.timestamp}, From account: {trans.from_account_id}, To account: {trans.to_account_id}");
+
                                 }
+                                AnsiConsole.Write(transferTable);
                                 Console.ReadKey();
 
                                 break;
@@ -642,10 +681,6 @@ namespace grupp_tiger2
                             Console.WriteLine();
                             foreach (var customer in bankUsers)
                             {
-
-                                Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
-
-
                                 if (customer.role_id == 2)
                                 {
                                     Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
@@ -654,7 +689,6 @@ namespace grupp_tiger2
                                 {
                                     Console.WriteLine($"Admin: {customer.first_name}, {customer.last_name}");
                                 }
-
                             }
                             Console.ReadKey();
                             // Show all accounts

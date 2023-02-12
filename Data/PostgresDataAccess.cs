@@ -65,7 +65,7 @@ namespace grupp_tiger2.Data
             {
                 conn.Open();
 
-                var output = conn.Query<bank_transactions>("select * from bank_transactions", new DynamicParameters());
+                var output = conn.Query<bank_transactions>("select * from bank_transactions order by id desc limit 10;", new DynamicParameters());
                 return output.ToList();
 
             }
@@ -191,19 +191,19 @@ namespace grupp_tiger2.Data
                     cmd.Connection = conn;
 
 
-                    cmd.Parameters.AddWithValue("@firstname", user.first_name);
-                    cmd.Parameters.AddWithValue("@lastname", user.last_name);
-                    cmd.Parameters.AddWithValue("@pincode", user.pin_code);
-                    cmd.Parameters.AddWithValue("@roleid", user.role_id);
-                    cmd.Parameters.AddWithValue("@branchid", user.branch_id);
-                    cmd.Parameters.AddWithValue("@username", user.username);
+                    //cmd.Parameters.AddWithValue("@firstname", user.first_name);
+                    //cmd.Parameters.AddWithValue("@lastname", user.last_name);
+                    //cmd.Parameters.AddWithValue("@pincode", user.pin_code);
+                    //cmd.Parameters.AddWithValue("@roleid", user.role_id);
+                    //cmd.Parameters.AddWithValue("@branchid", user.branch_id);
+                    //cmd.Parameters.AddWithValue("@username", user.username);
 
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
-                        "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
-                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
+                    //cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
+                    //    "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
+                    //    "VALUES (@from_account, @to_account, @timestamp, @amount);";
 
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," +
-                        " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
+                    //cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," +
+                    //    " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
 
                     cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\", \"username\") " +
                         ($"VALUES ('{user.first_name}', '{user.last_name}', '{user.pin_code}', '{user.role_id}', '{user.branch_id}', '{user.username}');");
