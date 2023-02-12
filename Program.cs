@@ -127,7 +127,7 @@ namespace grupp_tiger2
                     "Your accounts and balance",
                     "Transfer",
                     "Show transfer log",
-                    "Open a saving account",
+                    "Open a savings account",
                     "Loans",
                     "Exit"
                 };
@@ -258,9 +258,9 @@ namespace grupp_tiger2
                                 var bankAccounts = PostgresDataAccess.LoadBankAccounts();
 
                                 var showTable = new Table();
-                                showTable.Border = TableBorder.Simple;
-                                showTable.AddColumn("Account");
-                                showTable.AddColumn(new TableColumn("Balance").Centered());
+                                showTable.Border = TableBorder.HeavyEdge;
+                                showTable.AddColumn("[cyan2]Account[/]");
+                                showTable.AddColumn(new TableColumn("[deeppink2]Balance[/]").Centered());
                                 Console.WriteLine();
                                 foreach (var account in bankAccounts)
                                 {
@@ -288,6 +288,7 @@ namespace grupp_tiger2
 
                                 if (key.Key == ConsoleKey.D1)
                                 {
+                                    Console.WriteLine();
                                     foreach (var account in bankAccounts)
                                     {
                                         if (user.id == account.user_id)
@@ -465,15 +466,15 @@ namespace grupp_tiger2
                                 var accountNames = PostgresDataAccess.LoadBankAccounts();
 
                                 var transferTable = new Table();
-                                transferTable.Border = TableBorder.Square;
-                                transferTable.AddColumn("[green4]Amount[/]");
-                                transferTable.AddColumn(new TableColumn("[blue1]Currency[/]").Centered());
+                                transferTable.Border = TableBorder.Minimal;
+                                transferTable.AddColumn("[deeppink2]Amount[/]");
+                                transferTable.AddColumn(new TableColumn("[skyblue2]Currency[/]").Centered());
                                 transferTable.AddColumn(new TableColumn("[darkorange]Time[/]").Centered());
                                 transferTable.AddColumn(new TableColumn("[steelblue]From account[/]").Centered());
                                 transferTable.AddColumn(new TableColumn("[orchid2]To account[/]").Centered());
 
                                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                Console.WriteLine("\nRegistered transactions:\n");
+                                Console.WriteLine("\n10 most recent transactions:\n");
                                 Console.ResetColor();
                                 string fromAccount = "";
                                 string toAccount = "";
@@ -512,12 +513,10 @@ namespace grupp_tiger2
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine("\n\nSmartSave – 1% interest for one year.");
                                 Console.ResetColor();
-                                Console.WriteLine("\nPlease enter the amount you want to deposit to your savings account: ");
+                                Console.Write("\nPlease enter the amount you want to deposit to your new savings account: ");
                                 double savingAmount = double.Parse(Console.ReadLine());
 
-                                PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);
-                                // Return to login
-                                
+                                PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);                                
 
                                 break;
 
@@ -700,20 +699,20 @@ namespace grupp_tiger2
                             var bankUsers = PostgresDataAccess.LoadBankUsers();
                             Console.WriteLine();
                             var showTable = new Table();
-                            showTable.Border = TableBorder.HeavyHead;
-                            showTable.AddColumn("Admin");
-                            showTable.AddColumn(new TableColumn("Customer").Centered());
+                            showTable.Border = TableBorder.Minimal;
+                            showTable.AddColumn("[purple]Admin[/]");
+                            showTable.AddColumn(new TableColumn("[aqua]Customer[/]"));
                             Console.WriteLine();
                             
                             foreach (var customer in bankUsers)
                             {
                                 if (customer.role_id == 2)
                                 {
-                                    showTable.AddRow($"{customer.first_name} {customer.last_name}");
+                                    showTable.AddRow("", $"{customer.first_name} {customer.last_name}");
                                 }
                                 else
                                 {
-                                    showTable.AddRow($"{customer.first_name} {customer.last_name}");
+                                    showTable.AddRow($"{customer.first_name} {customer.last_name}", $"{customer.first_name} {customer.last_name}");
                                 }
                             }
                             AnsiConsole.Write(showTable);
