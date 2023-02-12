@@ -301,7 +301,7 @@ namespace grupp_tiger2
                                     Console.Write("\nPlease enter account to transfer from: ");
                                     string accountTransferFrom = Console.ReadLine();
 
-                                    Console.Write("\nAnd which of their accounts to transfer to: ");
+                                    Console.Write("\nAnd account to transfer to: ");
                                     string accountTransferTo = Console.ReadLine();
 
                                     if (accountTransferFrom == "Debit")
@@ -343,20 +343,6 @@ namespace grupp_tiger2
                                             if (user.id == account.user_id && account.name == accountTransferTo)
                                             {
                                                 to_account = account.account_id;
-                                            }
-                                        }
-                                    }
-                                    else if (accountTransferFrom == "Travel")
-                                    {
-                                        foreach (var account in bankAccounts)
-                                        {
-                                            if (user.id == account.user_id && account.name == "Debit")
-                                            {
-                                                to_account = account.account_id;
-                                            }
-                                            if (user.id == account.user_id && account.name == "Travel")
-                                            {
-                                                from_account = account.account_id;
                                             }
                                         }
                                     }
