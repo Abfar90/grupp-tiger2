@@ -4,6 +4,7 @@ using System.Configuration;
 using Dapper;
 using grupp_tiger2.Classes;
 using Npgsql;
+using Spectre.Console;
 namespace grupp_tiger2.Data
 {
     internal class PostgresDataAccess
@@ -92,7 +93,7 @@ namespace grupp_tiger2.Data
             {
                 conn.Open();
 
-                var output = conn.Query<bank_transactions>("select * from bank_transactions", new DynamicParameters());
+                var output = conn.Query<bank_transactions>("select * from bank_transactions order by id desc limit 10;", new DynamicParameters());
                 return output.ToList();
 
             }
@@ -118,13 +119,31 @@ namespace grupp_tiger2.Data
                     bank_transactions log = new bank_transactions(id, from_account, to_account, timeOfTransaction.ToString(), amount);
                     logTransfer(log);
 
-                    cmd.ExecuteNonQuery();
+                    AnsiConsole.Progress()
+                            .AutoClear(true)
+                            .StartAsync(async ctx =>
+                            {
+                                // Define tasks
+                                var task1 = ctx.AddTask("[green]Connecting to the server...[/]");
 
+                                while (!ctx.IsFinished)
+                                {
+                                    await Task.Delay(80);
+
+                                    task1.Increment(2.8);
+                                    
+                                }
+                                
+                            });
+
+                    Thread.Sleep(4000);
+                    cmd.ExecuteNonQuery();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nTransaction Complete.\n");
                     Console.ResetColor();
                     Console.WriteLine("Press any key to return to the menu.");
                     Console.ReadKey();
+
                 }
             }
         }
@@ -200,19 +219,19 @@ namespace grupp_tiger2.Data
                     cmd.Connection = conn;
 
 
-                    cmd.Parameters.AddWithValue("@firstname", user.first_name);
-                    cmd.Parameters.AddWithValue("@lastname", user.last_name);
-                    cmd.Parameters.AddWithValue("@pincode", user.pin_code);
-                    cmd.Parameters.AddWithValue("@roleid", user.role_id);
-                    cmd.Parameters.AddWithValue("@branchid", user.branch_id);
-                    cmd.Parameters.AddWithValue("@username", user.username);
+                    //cmd.Parameters.AddWithValue("@firstname", user.first_name);
+                    //cmd.Parameters.AddWithValue("@lastname", user.last_name);
+                    //cmd.Parameters.AddWithValue("@pincode", user.pin_code);
+                    //cmd.Parameters.AddWithValue("@roleid", user.role_id);
+                    //cmd.Parameters.AddWithValue("@branchid", user.branch_id);
+                    //cmd.Parameters.AddWithValue("@username", user.username);
 
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
-                        "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
-                        "VALUES (@from_account, @to_account, @timestamp, @amount);";
+                    //cmd.CommandText = "INSERT INTO \"public\".\"bank_transactions\" " +
+                    //    "(\"from_account_id\", \"to_account_id\", \"timestamp\", \"amount\") " +
+                    //    "VALUES (@from_account, @to_account, @timestamp, @amount);";
 
-                    cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," +
-                        " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
+                    //cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\"," +
+                    //    " \"username\") VALUES (@firstname, @lastname, @pincode, @roleid, @branchid, @username);";
 
                     cmd.CommandText = "INSERT INTO \"public\".\"bank_user\" (\"first_name\", \"last_name\", \"pin_code\", \"role_id\", \"branch_id\", \"username\") " +
                         ($"VALUES ('{user.first_name}', '{user.last_name}', '{user.pin_code}', '{user.role_id}', '{user.branch_id}', '{user.username}');");
