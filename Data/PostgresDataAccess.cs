@@ -29,6 +29,20 @@ namespace grupp_tiger2.Data
             }
         }
 
+        public static List<bank_user> GetUser(string username)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                var output = conn.Query<bank_user>($"select id from bank_user where username='{username}';", new DynamicParameters());
+                return output.ToList();
+
+            }
+        }
+
         public static List<bank_account> LoadBankAccounts()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
@@ -38,6 +52,20 @@ namespace grupp_tiger2.Data
                 conn.Open();
 
                 var output = conn.Query<bank_account>("select * from bank_account", new DynamicParameters());
+                return output.ToList();
+
+            }
+        }
+
+        public static List<bank_account> GetUserAccount(int id, string name)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["postgres"].ConnectionString;
+
+            using (NpgsqlConnection conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                var output = conn.Query<bank_account>($"select * from bank_account where user_id='{id}' AND name='{name}';", new DynamicParameters());
                 return output.ToList();
 
             }
@@ -82,8 +110,8 @@ namespace grupp_tiger2.Data
                 {
                     cmd.Connection = conn;
                     cmd.CommandText = "BEGIN; " +
-                                      ($"UPDATE account SET balance = balance - '{amount}' WHERE account_id = '{from_account}' AND user_id = '{id}'; ") +
-                                      ($"UPDATE account SET balance = balance + '{amount}' WHERE account_id = '{to_account}'; ") +
+                                      ($"UPDATE bank_account SET balance = balance - '{amount}' WHERE account_id = '{from_account}' AND user_id = '{id}'; ") +
+                                      ($"UPDATE bank_account SET balance = balance + '{amount}' WHERE account_id = '{to_account}'; ") +
                                       "COMMIT;";
 
                     DateTime timeOfTransaction = DateTime.Now;
