@@ -39,6 +39,7 @@ namespace grupp_tiger2
                     });
 
                 AnsiConsole.Markup("[slowblink][yellow]_____  _   __    ____  ___       ___    __    _      _    \r\n | |  | | / /`_ | |_  | |_)     | |_)  / /\\  | |\\ | | |_/ \r\n |_|  |_| \\_\\_/ |_|__ |_| \\     |_|_) /_/--\\ |_| \\| |_| \\ [/][/]");
+                AnsiConsole.Markup("\n[slowblink][yellow].........................................................[/][/]");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -255,8 +256,9 @@ namespace grupp_tiger2
                             case 0:
 
                                 var bankAccounts = PostgresDataAccess.LoadBankAccounts();
+
                                 var showTable = new Table();
-                                showTable.Border = TableBorder.HeavyHead;
+                                showTable.Border = TableBorder.Simple;
                                 showTable.AddColumn("Account");
                                 showTable.AddColumn(new TableColumn("Balance").Centered());
                                 Console.WriteLine();
@@ -446,7 +448,7 @@ namespace grupp_tiger2
                                 var accountNames = PostgresDataAccess.LoadBankAccounts();
 
                                 var transferTable = new Table();
-                                transferTable.Border = TableBorder.Rounded;
+                                transferTable.Border = TableBorder.Square;
                                 transferTable.AddColumn("[green4]Amount[/]");
                                 transferTable.AddColumn(new TableColumn("[blue1]Currency[/]").Centered());
                                 transferTable.AddColumn(new TableColumn("[darkorange]Time[/]").Centered());
@@ -491,9 +493,9 @@ namespace grupp_tiger2
 
                             case 3:
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("\n\nSmartSave – 1% for one year.");
+                                Console.WriteLine("\n\nSmartSave – 1% interest for one year.");
                                 Console.ResetColor();
-                                Console.WriteLine("\nPlease enter the amount you want to deposit in your savingaccount: ");
+                                Console.WriteLine("\nPlease enter the amount you want to deposit to your savings account: ");
                                 double savingAmount = double.Parse(Console.ReadLine());
 
                                 PostgresDataAccess.CreateSavingsAccount(userId, savingAmount);
@@ -587,6 +589,7 @@ namespace grupp_tiger2
                 {
 
                     AnsiConsole.Markup("[slowblink][magenta]  __    ___   _      _   _          _      ____  _      _    \r\n / /\\  | | \\ | |\\/| | | | |\\ |     | |\\/| | |_  | |\\ | | | | \r\n/_/--\\ |_|_/ |_|  | |_| |_| \\|     |_|  | |_|__ |_| \\| \\_\\_/ [/][/]");
+                    AnsiConsole.Markup("\n[slowblink][magenta]............................................................[/][/]");
                     Console.WriteLine();
 
                     Console.Write("\nCurrently logged in as: ");
@@ -679,17 +682,24 @@ namespace grupp_tiger2
                         {
                             var bankUsers = PostgresDataAccess.LoadBankUsers();
                             Console.WriteLine();
+                            var showTable = new Table();
+                            showTable.Border = TableBorder.HeavyHead;
+                            showTable.AddColumn("Admin");
+                            showTable.AddColumn(new TableColumn("Customer").Centered());
+                            Console.WriteLine();
+                            
                             foreach (var customer in bankUsers)
                             {
                                 if (customer.role_id == 2)
                                 {
-                                    Console.WriteLine($"Customer: {customer.first_name}, {customer.last_name}");
+                                    showTable.AddRow($"{customer.first_name} {customer.last_name}");
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Admin: {customer.first_name}, {customer.last_name}");
+                                    showTable.AddRow($"{customer.first_name} {customer.last_name}");
                                 }
                             }
+                            AnsiConsole.Write(showTable);
                             Console.ReadKey();
                             // Show all accounts
                         }
