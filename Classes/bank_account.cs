@@ -13,7 +13,7 @@ namespace grupp_tiger2.Classes
         public double interest_rate { get; set; }
         public int account_id { get; set; }
         public int user_id { get; set; }
-        public string currency_id { get; set; }
+        public int currency_id { get; set; }
 
     }
 }

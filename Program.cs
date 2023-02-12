@@ -286,6 +286,8 @@ namespace grupp_tiger2
 
                                 key = Console.ReadKey(true);
 
+
+                                //Transfer inom egna konton
                                 if (key.Key == ConsoleKey.D1)
                                 {
                                     Console.WriteLine();
@@ -344,6 +346,20 @@ namespace grupp_tiger2
                                             }
                                         }
                                     }
+                                    else if (accountTransferFrom == "Travel")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == "Debit")
+                                            {
+                                                to_account = account.account_id;
+                                            }
+                                            if (user.id == account.user_id && account.name == "Travel")
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                        }
+                                    }
 
                                     bool canTransfer = false;
 
@@ -363,6 +379,10 @@ namespace grupp_tiger2
                                                 }
                                                 else
                                                 {
+                                                    if (account.currency_id == 2 || account.currency_id == 3 || account.currency_id == 4)
+                                                    {
+                                                        amount = bank_transactions.exchange(amount, account.currency_id);
+                                                    }
                                                     PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
                                                     canTransfer = true;
                                                     break;
@@ -372,9 +392,12 @@ namespace grupp_tiger2
                                     }
 
                                 }
+
+                                //Transfer till andra konton
                                 else if (key.Key == ConsoleKey.D2)
                                 {
                                     bankAccounts = PostgresDataAccess.LoadBankAccounts();
+                                    bankUsers = PostgresDataAccess.LoadBankUsers();
 
                                     foreach (var account in bankAccounts)
                                     {
@@ -382,7 +405,13 @@ namespace grupp_tiger2
                                         {
                                             Console.WriteLine("Your debit balance is " + account.balance);
                                         }
+
                                         if (user.id == account.user_id && account.name == "Savings")
+                                        {
+                                            Console.WriteLine("Your savings balance is " + account.balance);
+                                        }
+
+                                        if (user.id == account.user_id && account.name == "Travel")
                                         {
                                             Console.WriteLine("Your savings balance is " + account.balance);
                                         }
@@ -391,16 +420,26 @@ namespace grupp_tiger2
                                     Console.Write("\nPlease enter account to transfer from: ");
                                     string accountTransferFrom = Console.ReadLine();
 
-                                    foreach (var account in bankAccounts)
-                                    {
-                                        Console.WriteLine($"{account.account_id} --> {account.name}: {account.balance}");
-                                    }
-
-                                    Console.Write("\nPlease enter which customer id to transfer to: ");
-                                    int userTransferTo = int.Parse(Console.ReadLine());
+                                    Console.Write("\nPlease enter which username to transfer to: ");
+                                    string userTransferTo = Console.ReadLine();
 
                                     Console.Write("\nAnd which of their accounts to transfer to: ");
                                     string accountTransferTo = Console.ReadLine();
+
+                                    var receivers = PostgresDataAccess.GetUser(userTransferTo);
+                                    int id=0;
+                                    foreach (var receiver in receivers)
+                                    {
+                                        id = receiver.id;
+                                        
+                                    }
+                                    var receiverAccounts = PostgresDataAccess.GetUserAccount(id, accountTransferTo);
+
+                                    foreach (var receiverAccount in receiverAccounts)
+                                    {
+                                        to_account = receiverAccount.account_id;
+                                    }
+
 
                                     if (accountTransferFrom == "Debit")
                                     {
@@ -409,10 +448,6 @@ namespace grupp_tiger2
                                             if (user.id == account.user_id && account.name == accountTransferFrom)
                                             {
                                                 from_account = account.account_id;
-                                            }
-                                            if (userTransferTo == account.user_id && account.name == accountTransferTo)
-                                            {
-                                                to_account = account.account_id;
                                             }
                                         }
                                     }
@@ -424,9 +459,15 @@ namespace grupp_tiger2
                                             {
                                                 from_account = account.account_id;
                                             }
-                                            if (userTransferTo == account.user_id && account.name == accountTransferTo)
+                                        }
+                                    }
+                                    else if (accountTransferFrom == "Travel")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
                                             {
-                                                to_account = account.account_id;
+                                                from_account = account.account_id;
                                             }
                                         }
                                     }
@@ -449,6 +490,10 @@ namespace grupp_tiger2
                                                 }
                                                 else
                                                 {
+                                                    if (account.currency_id == 2 || account.currency_id == 3 || account.currency_id == 4)
+                                                    {
+                                                        amount = bank_transactions.exchange(amount, account.currency_id);
+                                                    }
                                                     PostgresDataAccess.Transfer(from_account, to_account, amount, userId);
                                                     canTransfer = true;
                                                     break;

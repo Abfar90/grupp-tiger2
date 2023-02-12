@@ -22,6 +22,25 @@
         public bank_transactions()
         {
         }
+
+        public static double exchange(double amount, int currencyID)
+        {
+            double newAmount = 0;
+            switch (currencyID)
+            {
+                case 2:
+                    newAmount = 12.73 * amount;
+                    break;
+                case 3:
+                    newAmount = 11.38 * amount;
+                    break;
+                case 4:
+                    newAmount = 10.57 * amount;
+                    break;
+            }
+            return newAmount;
+        }
+
     }
     
   
