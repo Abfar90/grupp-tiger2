@@ -295,18 +295,21 @@ namespace grupp_tiger2
                                             Console.WriteLine($"Your {account.name} account balance: {account.balance}");
                                         }
                                     }
-                                    Console.Write("\nPlease select account to transfer from: ");
+                                    Console.Write("\nPlease enter account to transfer from: ");
                                     string accountTransferFrom = Console.ReadLine();
+
+                                    Console.Write("\nAnd which of their accounts to transfer to: ");
+                                    string accountTransferTo = Console.ReadLine();
 
                                     if (accountTransferFrom == "Debit")
                                     {
                                         foreach (var account in bankAccounts)
                                         {
-                                            if (user.id == account.user_id && account.name == "Debit")
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
                                             {
                                                 from_account = account.account_id;
                                             }
-                                            if (user.id == account.user_id && account.name == "Savings")
+                                            if (user.id == account.user_id && account.name == accountTransferTo)
                                             {
                                                 to_account = account.account_id;
                                             }
@@ -316,13 +319,27 @@ namespace grupp_tiger2
                                     {
                                         foreach (var account in bankAccounts)
                                         {
-                                            if (user.id == account.user_id && account.name == "Debit")
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
+                                            {
+                                                from_account = account.account_id;
+                                            }
+                                            if (user.id == account.user_id && account.name == accountTransferTo)
                                             {
                                                 to_account = account.account_id;
                                             }
-                                            if (user.id == account.user_id && account.name == "Savings")
+                                        }
+                                    }
+                                    else if (accountTransferFrom == "Travel")
+                                    {
+                                        foreach (var account in bankAccounts)
+                                        {
+                                            if (user.id == account.user_id && account.name == accountTransferFrom)
                                             {
                                                 from_account = account.account_id;
+                                            }
+                                            if (user.id == account.user_id && account.name == accountTransferTo)
+                                            {
+                                                to_account = account.account_id;
                                             }
                                         }
                                     }
