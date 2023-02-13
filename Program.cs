@@ -351,7 +351,7 @@ namespace grupp_tiger2
 
                                     while (!canTransfer)
                                     {
-                                        Console.Write("Please select amount to transfer: ");
+                                        Console.Write("\nEnter amount to transfer: ");
                                         double amount = double.Parse(Console.ReadLine());
 
                                         foreach (var account in bankAccounts)
