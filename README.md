@@ -10,6 +10,8 @@ This project is part of an Agile Working course together with @Abfar90, @Slipzte
 * [Styling](#styling)  
 * [Class Structure](#class-structure) 
 * [Database](#database)
+* [UI](#ui)
+* [App](#app)
 * [Flowchart](#flowchart)
 * [UML Diagram](#uml-diagram)
 * [Trello Board](#trello-board)
