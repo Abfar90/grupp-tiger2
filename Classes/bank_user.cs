@@ -1,6 +1,6 @@
 ﻿namespace grupp_tiger2.Classes
 {
-    internal class bank_user
+    public class bank_user
     {
         public int id { get; set; }
         public string first_name { get; set; }
@@ -18,6 +18,12 @@
             this.username = username;
             this.role_id = roleID;
             this.branch_id = branchID;
+        }
+
+        public bank_user(string username, string pin_code)
+        {
+            this.username = username;
+            this.pin_code = pin_code;
         }
 
         public bank_user()
