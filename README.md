@@ -42,6 +42,14 @@ The connection string is then used throughout our source code for sending and re
 
 We managed our database through DbGate.
 
+### UI
+
+The "UI" folder contains the menus shown in the console app, login logic as well as the main function that runs the app.
+
+### App
+
+From here the main run function is called to run the application.
+
 ### Flowchart
 
 * [Link Google Drive](https://drive.google.com/file/d/1JkZSbX0GtFmuHuBuBUc7mL0IaeXwHLqw/view)
